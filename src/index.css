@@ -23,6 +23,23 @@
     color: #f1f5f9;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent awkward single-word lines */
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+
+  /* Headings: balance avoids widowed short words at line end */
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    line-height: 1.2;
+  }
+
+  /* Paragraphs: 'pretty' mode prevents 1-2 word orphan lines */
+  p, li {
+    text-wrap: pretty;
+    overflow-wrap: break-word;
+    line-height: 1.7;
   }
 
   * {
@@ -52,12 +69,25 @@
   }
 
   .section-padding {
-    padding: 6rem 1.5rem;
+    padding: 3rem 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .section-padding {
+      padding: 4.5rem 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section-padding {
+      padding: 6rem 1.5rem;
+    }
   }
 
   .container-max {
     max-width: 1200px;
     margin: 0 auto;
+    width: 100%;
   }
 
   .card-hover {

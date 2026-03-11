@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useScrollReveal, useSectionHeading } from '../hooks/useGsapReveal';
+import emailjs from '@emailjs/browser';
 
 const SOCIAL_LINKS = [
   {
@@ -48,9 +49,12 @@ const SOCIAL_LINKS = [
 const Contact = () => {
   const headingRef = useSectionHeading();
   const containerRef = useScrollReveal(0.15);
+  const formRef = useRef(null);
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -59,9 +63,26 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
-    setStatus('success');
-    setFormData({ name: '', email: '', message: '' });
-    setTimeout(() => setStatus('idle'), 3000);
+    
+    setLoading(true);
+    setSuccess(false);
+    setError(false);
+
+    emailjs.sendForm(
+      import.meta.env.VITE_EMAIL_SERVICE_ID,
+      import.meta.env.VITE_EMAIL_TEMPLATE_ID,
+      formRef.current,
+      import.meta.env.VITE_EMAIL_PUBLIC_KEY,
+    ).then(() => {
+      setLoading(false);
+      setSuccess(true);
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setSuccess(false), 5000);
+    }).catch(() => {
+      setLoading(false);
+      setError(true);
+      setTimeout(() => setError(false), 5000);
+    });
   };
 
   return (
@@ -78,7 +99,7 @@ const Contact = () => {
         <div ref={containerRef} className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left: Contact form */}
           <div className="reveal-target">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div className="flex flex-col gap-2 relative group">
                 <label className="text-slate-400 text-sm font-medium group-focus-within:text-indigo-400 transition-colors" htmlFor="name">Name</label>
                 <input
@@ -123,15 +144,29 @@ const Contact = () => {
 
               <button
                 type="submit"
-                className="mt-2 px-6 py-3.5 rounded-xl font-medium text-sm bg-indigo-500 text-white hover:bg-indigo-400 hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(99,102,241,0.3)] transition-all duration-300 active:scale-[0.98]"
+                disabled={loading}
+                className="mt-2 px-6 py-3.5 rounded-xl font-medium text-sm bg-indigo-500 text-white hover:bg-indigo-400 hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(99,102,241,0.3)] transition-all duration-300 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
               >
-                {status === 'success' ? 'Message Sent' : 'Send Message'}
+                {loading ? 'Sending...' : 'Send Message'}
               </button>
+
+              {/* Success message */}
+              {success && (
+                <p className="text-emerald-400 text-sm text-center bg-emerald-400/10 border border-emerald-400/20 rounded-xl px-4 py-3">
+                  ✓ Message sent successfully. I'll get back to you soon!
+                </p>
+              )}
+              {/* Error message */}
+              {error && (
+                <p className="text-rose-400 text-sm text-center bg-rose-400/10 border border-rose-400/20 rounded-xl px-4 py-3">
+                  ✗ Something went wrong. Please try again or email me directly.
+                </p>
+              )}
             </form>
           </div>
 
           {/* Right: Direct links */}
-          <div className="reveal-target flex flex-col h-full lg:border-l lg:border-[#1e2638] lg:pl-16">
+          <div className="reveal-target flex flex-col h-full pt-8 lg:pt-0 lg:border-l lg:border-[#1e2638] lg:pl-16 border-t border-[#1e2638] lg:border-t-0">
             <div className="flex flex-col gap-4">
               {SOCIAL_LINKS.map((link) => (
                 <a

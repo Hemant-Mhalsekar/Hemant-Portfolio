@@ -18,18 +18,18 @@ const About = () => {
         {/* Heading */}
         <div ref={headingRef} className="mb-14">
           <span className="text-indigo-400 text-sm font-semibold uppercase tracking-widest">About Me</span>
-          <h2 className="text-4xl font-bold text-white mt-2">Who I am</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mt-2">Who I am</h2>
         </div>
 
         <div ref={containerRef} className="grid lg:grid-cols-2 gap-14 items-center">
           <div className="flex flex-col gap-5">
-            <p className="reveal-target text-slate-300 text-base leading-relaxed pb-2">
+            <p className="reveal-target text-slate-300 text-base leading-relaxed pb-2 max-w-prose">
               I’m currently pursuing my MCA and building myself into a strong full stack developer with a focus on writing clean, scalable, and maintainable code.
             </p>
-            <p className="reveal-target text-slate-400 text-base leading-relaxed pb-2">
+            <p className="reveal-target text-slate-400 text-base leading-relaxed pb-2 max-w-prose">
               I enjoy working across the entire development process — from crafting intuitive user interfaces to structuring backend systems and APIs that perform efficiently under real-world demands.
             </p>
-            <p className="reveal-target text-slate-400 text-base leading-relaxed pb-2">
+            <p className="reveal-target text-slate-400 text-base leading-relaxed pb-2 max-w-prose">
               I’m deeply interested in building practical solutions, improving systems, and continuously leveling up my technical skills. My long-term goal is to grow as a software engineer while also taking on freelance projects that solve meaningful business problems.
             </p>
           </div>
@@ -37,8 +37,8 @@ const About = () => {
           {/* Stats + Visual */}
           <div className="reveal-target flex flex-col gap-8">
             {/* Abstract visual */}
-            <div className="relative w-full max-w-xs mx-auto lg:mx-0 group cursor-default">
-              <div className="w-64 h-64 rounded-3xl bg-gradient-to-br from-[#161b27] to-[#0f1117] border border-[#1e2638] group-hover:border-indigo-500/30 flex items-center justify-center relative overflow-hidden transition-all duration-500 group-hover:shadow-[0_0_40px_rgba(99,102,241,0.1)]">
+            <div className="relative w-full max-w-[12rem] sm:max-w-xs mx-auto lg:mx-0 group cursor-default">
+              <div className="w-48 h-48 sm:w-64 sm:h-64 rounded-3xl bg-gradient-to-br from-[#161b27] to-[#0f1117] border border-[#1e2638] group-hover:border-indigo-500/30 flex items-center justify-center relative overflow-hidden transition-all duration-500 group-hover:shadow-[0_0_40px_rgba(99,102,241,0.1)]">
                 
                 {/* Background glow that pulses on hover */}
                 <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">

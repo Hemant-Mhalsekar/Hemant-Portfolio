@@ -8,7 +8,7 @@ const GLOWS = [
   {
     // Indigo — large centrepiece
     color: 'bg-indigo-600/20',
-    size: 'w-[700px] h-[700px]',
+    size: 'w-[400px] h-[400px] sm:w-[550px] sm:h-[550px] md:w-[700px] md:h-[700px]',
     pos: '-translate-x-[10%] -translate-y-[10%]',
     drift: { x: 40, y: 30, duration: 20 },
     parallax: 0.018,
@@ -16,7 +16,7 @@ const GLOWS = [
   {
     // Purple — upper-right accent
     color: 'bg-purple-600/15',
-    size: 'w-[500px] h-[500px]',
+    size: 'w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] md:w-[500px] md:h-[500px]',
     pos: 'translate-x-[35%] -translate-y-[25%]',
     drift: { x: -35, y: 25, duration: 18 },
     parallax: 0.012,
@@ -24,7 +24,7 @@ const GLOWS = [
   {
     // Blue — lower-left accent
     color: 'bg-blue-600/12',
-    size: 'w-[450px] h-[450px]',
+    size: 'w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] md:w-[450px] md:h-[450px]',
     pos: '-translate-x-[30%] translate-y-[20%]',
     drift: { x: 30, y: -20, duration: 22 },
     parallax: 0.010,
@@ -180,7 +180,7 @@ const Hero = () => {
         {/* Name */}
         <h1
           ref={nameRef}
-          className="text-5xl sm:text-6xl md:text-7xl font-black leading-tight tracking-tight mb-2 text-white opacity-0"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-2 text-white opacity-0"
         >
           Hemant Mhalsekar
         </h1>
@@ -194,7 +194,7 @@ const Hero = () => {
         {/* Title */}
         <p
           ref={titleRef}
-          className="text-xl sm:text-2xl md:text-3xl text-indigo-400 font-semibold mb-6 opacity-0"
+          className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-indigo-400 font-semibold mb-4 sm:mb-6 opacity-0"
         >
           Full Stack Developer | MCA
         </p>
@@ -202,13 +202,13 @@ const Hero = () => {
         {/* Tagline */}
         <p
           ref={taglineRef}
-          className="text-slate-400 text-base sm:text-lg max-w-2xl leading-relaxed mb-10 pb-2 opacity-0"
+          className="text-slate-400 text-sm sm:text-base md:text-lg max-w-xl sm:max-w-2xl leading-relaxed mb-8 sm:mb-10 pb-2 opacity-0 px-2 sm:px-0"
         >
           I design and build scalable web applications with clean architecture and modern technologies — helping businesses and startups turn ideas into reliable digital products.
         </p>
 
         {/* CTAs */}
-        <div ref={ctaRef} className="flex flex-wrap justify-center gap-4 opacity-0">
+        <div ref={ctaRef} className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 opacity-0 w-full px-4 sm:px-0">
           <div ref={primaryBtnRef}>
             <Button
               variant="primary"
@@ -232,7 +232,7 @@ const Hero = () => {
         </div>
 
         {/* Scroll hint */}
-        <div ref={scrollHintRef} className="mt-20 flex flex-col items-center gap-3 opacity-0">
+        <div ref={scrollHintRef} className="mt-14 sm:mt-20 flex flex-col items-center gap-3 opacity-0 hidden sm:flex">
           <span className="text-slate-600 text-xs uppercase tracking-widest">Scroll</span>
           
           {/* Scroll Cue Pill */}
