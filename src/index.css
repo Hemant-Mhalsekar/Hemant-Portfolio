@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark: #0f1117;
+  --color-dark-card: #161b27;
+  --color-dark-border: #1e2638;
+  --color-accent: #6366f1;
+  --color-accent-light: #818cf8;
+  --color-accent-muted: #6366f120;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --font-inter: 'Inter', sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+  }
+
+  body {
+    background-color: #0f1117;
+    color: #f1f5f9;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0f1117;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #6366f1;
+    border-radius: 3px;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    background: linear-gradient(135deg, #6366f1 0%, #818cf8 50%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-padding {
+    padding: 6rem 1.5rem;
+  }
+
+  .container-max {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .card-hover {
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    border-color: #6366f150;
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+  }
+}
