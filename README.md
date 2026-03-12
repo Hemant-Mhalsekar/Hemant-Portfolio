@@ -1,39 +1,92 @@
 # Hemant Mhalsekar — Full Stack Developer Portfolio
 
-A modern, high-performance portfolio website built with React, Vite, Tailwind CSS, and GSAP. Designed to be minimal, professional, and accessible.
+<div align="center">
+  <img src="./public/favicon.ico" alt="Logo" width="80" height="80" />
+  <p align="center">
+    <strong>A high-performance, premium portfolio experience.</strong>
+    <br />
+    Built with React 19, Vite, Tailwind CSS v4, and GSAP.
+    <br />
+    <a href="https://eatveyra.com/"><strong>View Live Portfolio »</strong></a>
+  </p>
+</div>
 
-## Live Demo
-Ready to be deployed to [Vercel](https://vercel.com/) (or your preferred hosting provider).
+---
 
-## Features
-- **Dark Theme Aesthetics**: A sleek, professional dark mode UI with indigo accent colors.
-- **GSAP Animations**: Purposeful, highly-optimized scroll reveals using ScrollTrigger that strictly respect users' `prefers-reduced-motion` settings.
-- **Responsive Navigation**: A sticky glassmorphic navbar featuring active scroll-spy highlighting and a smooth mobile slide-down menu.
-- **Minimal Contact Flow**: A refined layout allowing direct, friction-free connections via email, LinkedIn, GitHub, or direct resume downloads.
-- **SEO Optimized**: Complete metadata injected via `index.html` (including OpenGraph properties) for accurate social sharing previews.
-- **Production Ready**: Configured with `vercel.json` for foolproof Single Page Application (SPA) routing.
+## 🚀 Overview
 
-## Tech Stack
-- **Framework**: React 19 / Vite
-- **Styling**: Tailwind CSS v4
-- **Animations**: GSAP & ScrollTrigger
-- **Deploy**: Vercel
+This is a modern, professional portfolio website designed to showcase full-stack development expertise with a focus on **visual excellence** and **smooth user experience**. It features a glassmorphic design system, reactive animations, and a performance-first architecture.
 
-## Local Development
+## ✨ Key Features
 
-1. Clone the repository and install dependencies:
+- **Premium Aesthetics**: Sleek dark mode UI utilizing HSL tailored colors and glassmorphic components.
+- **Dynamic Background**: Interactive drifting gradient glows (Indigo, Purple, Blue) that respond to mouse movement.
+- **GSAP Animations**: Purposeful scroll reveals and sequential entrance animations using GSAP & ScrollTrigger.
+- **Accessible Design**: Strictly respects `prefers-reduced-motion` settings and follows semantic HTML best practices.
+- **Responsive & Performant**: Mobile-first design with a sticky glassmorphic navbar and optimized assets for lightning-fast loads.
+- **Automated Contact**: Integrated email flow via EmailJS for friction-free connections.
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Framework**: [React 19](https://react.dev/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Animations**: [GSAP](https://greensock.com/gsap/) & [Lenis Smooth Scroll](https://github.com/darkroomengineering/lenis)
+
+### Tools & Deployment
+- **Hosting**: [Vercel](https://vercel.com/) / [Netlify](https://www.netlify.com/)
+- **Icons**: [Simple Icons](https://simpleicons.org/)
+- **Version Control**: Git & GitHub
+
+## 📂 Project Structure
+
+```text
+src/
+├── assets/             # Images and static assets
+├── components/         # Reusable UI components (CursorGlow, Navbar, etc.)
+├── data/               # Centralized data for projects, skills, and experience
+├── hooks/              # Custom React hooks
+├── sections/           # Major page sections (Hero, About, Projects, etc.)
+└── index.css           # Global styles and Tailwind configuration
+```
+
+## 🏗️ Local Development
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Hemant-Mhalsekar/Hemant-Portfolio.git
+   cd Hemant-Portfolio
+   ```
+
+2. **Install dependencies:**
    ```bash
    npm install
    ```
-2. Start the local development server:
+
+3. **Start the development server:**
    ```bash
    npm run dev
    ```
-3. Open `http://localhost:5173` to view it in your browser.
 
-## Deployment
-This project is pre-configured for Vercel. Thanks to the included `vercel.json`, React Router will function perfectly on direct load. Just import the repository into Vercel and it will automatically build (`npm run build`) and deploy the `dist/` folder.
+4. **Build for production:**
+   ```bash
+   npm run build
+   ```
 
-## Author
+## 🌟 Featured Projects
+
+- **Veyra**: Shopify E-Commerce Store focusing on performance and custom Liquid templates.
+- **CO–PO Mapper**: Academic evaluation system for automated attainment analysis.
+- **Library Management**: Layered Java application with persistent MySQL storage.
+
+---
+
+## 👨‍💻 Author
+
 **Hemant Mhalsekar**
-Building ideas into products.
+*Building ideas into products.*
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/hemant-mhalsekar)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Hemant-Mhalsekar)
+
