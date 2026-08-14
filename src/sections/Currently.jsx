@@ -34,7 +34,7 @@ const STRIKE_START  = CARD_DELAY + CARD_DURATION + STRIKE_BUFFER; // 1000ms
 const ProgressCard = ({ struckItems }) => (
   <div
     className="bg-[#39471F] px-9 py-10 sm:px-11 sm:py-11"
-    style={{ transform: 'rotate(-1deg)' }}
+    style={{ transform: 'rotate(-1deg)', borderRadius: '18px' }}
   >
     <p
       className="text-[11px] text-[#DE9F2E] tracking-[0.22em] uppercase mb-8"
@@ -52,10 +52,25 @@ const ProgressCard = ({ struckItems }) => (
 
         return (
           <div key={i} className="flex items-center gap-3">
-            {/* Fixed marker column — dot only for in-progress */}
+            {/* Marker column — dot for every row, style varies by status */}
             <span className="flex-shrink-0 w-3 flex items-center justify-center">
+              {item.status === 'done' && (
+                // Filled mustard dot — fades in sync with the struck text
+                <span
+                  className="block w-[6px] h-[6px] rounded-full bg-[#DE9F2E]"
+                  style={{ opacity: textOpacity, transition: 'opacity 350ms ease' }}
+                />
+              )}
               {item.status === 'in-progress' && (
+                // Filled mustard dot — full opacity, unchanged
                 <span className="block w-[6px] h-[6px] rounded-full bg-[#DE9F2E]" />
+              )}
+              {item.status === 'queued' && (
+                // Hollow outlined dot — dim to match queued text opacity
+                <span
+                  className="block w-[6px] h-[6px] rounded-full"
+                  style={{ border: '1px solid rgba(203,211,184,0.4)', opacity: 0.55 }}
+                />
               )}
             </span>
 
