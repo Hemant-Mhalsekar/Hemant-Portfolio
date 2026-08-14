@@ -2,80 +2,85 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useScrollReveal, useSectionHeading } from '../hooks/useGsapReveal';
 
 // ── Data ───────────────────────────────────────────────────────────────────────
-// status: 'done' | 'in-progress' | 'queued'
 const ITEMS = [
-  { text: 'aws / iam',   status: 'done'        },
-  { text: 'aws / s3',    status: 'done'        },
-  { text: 'react',       status: 'done'        },
-  { text: 'node.js',     status: 'done'        },
-  { text: 'dsa (java)',  status: 'in-progress' },
-  { text: 'spring boot', status: 'in-progress' },
-  { text: 'typescript',  status: 'queued'      },
-  { text: 'next.js',     status: 'queued'      },
+  { text: 'AWS / IAM',   status: 'done'        },
+  { text: 'AWS / S3',    status: 'done'        },
+  { text: 'React',       status: 'done'        },
+  { text: 'Node.js',     status: 'done'        },
+  { text: 'DSA (Java)',  status: 'in-progress' },
+  { text: 'Spring Boot', status: 'in-progress' },
+  { text: 'TypeScript',  status: 'queued'      },
+  { text: 'Next.js',     status: 'queued'      },
 ];
 
-// Indices of items that should receive the strikethrough animation
 const DONE_INDICES = ITEMS.reduce((acc, item, i) => {
   if (item.status === 'done') acc.push(i);
   return acc;
 }, []);
 
-// Computed once at module load — stable for the page lifetime.
-// Used to skip all motion-based setup and initialize to the final "done" state.
+// Computed once at module load — drives all reduced-motion branching
 const PREFERS_REDUCED =
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ── Progress Card ──────────────────────────────────────────────────────────────
+// Olive background, Bricolage Grotesque items, mustard strike on done entries.
+// Deliberately different from the Hero terminal: no CLI chrome, display font,
+// olive palette instead of ink — same off-grid rotation language, different voice.
 const ProgressCard = React.forwardRef(({ struckItems }, ref) => (
   <div
     ref={ref}
-    className="bg-[#15180F] p-8 sm:p-10"
-    style={{ transform: 'rotate(1deg)' }}
+    className="bg-[#39471F] px-9 py-10 sm:px-11 sm:py-11"
+    style={{ transform: 'rotate(-1deg)' }}
   >
-    {/* Card title */}
+    {/* Label — mono, small, mustard, no "$" prompt */}
     <p
-      className="text-[11px] text-[#DE9F2E] tracking-[0.18em] uppercase mb-7"
+      className="text-[11px] text-[#DE9F2E] tracking-[0.22em] uppercase mb-8"
       style={{ fontFamily: "'IBM Plex Mono', monospace" }}
     >
-      $ progress --status
+      things I'm picking up
     </p>
 
     {/* Item list */}
-    <div className="divide-y divide-[#CBD3B8]/10">
+    <div className="flex flex-col gap-[18px]">
       {ITEMS.map((item, i) => {
         const isStruck = struckItems.has(i);
 
-        const textColor =
-          item.status === 'done'
-            ? isStruck
-              ? 'rgba(203,211,184,0.42)'  // dimmed once struck
-              : '#CBD3B8'
-            : item.status === 'queued'
-            ? 'rgba(203,211,184,0.38)'    // pre-dimmed for queued
-            : '#CBD3B8';                  // full opacity for in-progress
+        const textOpacity =
+          item.status === 'done' && isStruck ? 0.55 :
+          item.status === 'queued'            ? 0.40 :
+          1;
 
         return (
-          <div
-            key={i}
-            className="flex items-center justify-between gap-6 py-[11px]"
-          >
-            {/* Text + horizontal strikethrough overlay */}
+          <div key={i} className="flex items-center gap-3">
+
+            {/* Fixed-width marker column — dot only for in-progress,
+                keeps text left-edges aligned across all three states */}
+            <span className="flex-shrink-0 w-3 flex items-center justify-center">
+              {item.status === 'in-progress' && (
+                <span className="block w-[6px] h-[6px] rounded-full bg-[#DE9F2E]" />
+              )}
+            </span>
+
+            {/* Text + mustard strikethrough overlay */}
             <div className="relative flex-1 min-w-0">
               <span
-                className="text-[12.5px] tracking-[0.08em]"
+                className="block"
                 style={{
-                  fontFamily: "'IBM Plex Mono', monospace",
-                  color: textColor,
-                  transition: 'color 300ms ease',
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
+                  fontWeight: 700,
+                  color: '#CBD3B8',
+                  opacity: textOpacity,
+                  fontStyle: item.status === 'in-progress' ? 'italic' : 'normal',
+                  transition: 'opacity 350ms ease',
+                  lineHeight: 1.2,
                 }}
               >
                 {item.text}
               </span>
 
-              {/* Strike overlay — width animates 0% → 100% on trigger.
-                  Spans the full flex-1 area so all done lines are equal width,
-                  which reads as intentional editorial alignment. */}
+              {/* Mustard line — draws left-to-right via width 0% → 100% */}
               {item.status === 'done' && (
                 <span
                   aria-hidden="true"
@@ -83,34 +88,18 @@ const ProgressCard = React.forwardRef(({ struckItems }, ref) => (
                     position: 'absolute',
                     top: '50%',
                     left: 0,
-                    height: '1px',
+                    height: '1.5px',
                     width: isStruck ? '100%' : '0%',
-                    backgroundColor: 'rgba(203,211,184,0.4)',
+                    backgroundColor: '#DE9F2E',
                     transform: 'translateY(-50%)',
-                    // Transition always set so it fires reliably when width changes.
-                    // PREFERS_REDUCED → 'none' so the final state appears instantly.
-                    transition: PREFERS_REDUCED ? 'none' : 'width 400ms ease',
+                    // Transition kept always-on so it fires reliably when
+                    // width changes. PREFERS_REDUCED → 'none' → instant.
+                    transition: PREFERS_REDUCED ? 'none' : 'width 450ms ease',
                     pointerEvents: 'none',
                   }}
                 />
               )}
             </div>
-
-            {/* Status marker — right-aligned */}
-            <span
-              className="flex-shrink-0 text-[11px] tracking-[0.06em]"
-              style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-            >
-              {item.status === 'done' && (
-                <span style={{ color: 'rgba(203,211,184,0.30)' }}>done</span>
-              )}
-              {item.status === 'in-progress' && (
-                <span style={{ color: '#DE9F2E' }}>···</span>
-              )}
-              {item.status === 'queued' && (
-                <span style={{ color: 'rgba(203,211,184,0.25)' }}>queued</span>
-              )}
-            </span>
           </div>
         );
       })}
@@ -126,15 +115,12 @@ const Currently = () => {
   const contentRef = useScrollReveal(0.15);
   const cardRef    = useRef(null);
 
-  // For reduced motion: initialize to final state — card visible, all done items struck.
-  // For normal: start empty/hidden; IntersectionObserver drives the reveal.
   const [struckItems, setStruckItems] = useState(
     () => (PREFERS_REDUCED ? new Set(DONE_INDICES) : new Set())
   );
   const [cardVisible, setCardVisible] = useState(PREFERS_REDUCED);
 
   useEffect(() => {
-    // Reduced motion already handled by state initializers above
     if (PREFERS_REDUCED || !cardRef.current) return;
 
     const card = cardRef.current;
@@ -144,18 +130,16 @@ const Currently = () => {
       ([entry]) => {
         if (!entry.isIntersecting) return;
 
-        // Step 1: fade card in
         setCardVisible(true);
 
-        // Step 2: stagger strikethrough animations across done items
         DONE_INDICES.forEach((itemIdx, order) => {
           const t = setTimeout(() => {
             setStruckItems((prev) => new Set([...prev, itemIdx]));
-          }, order * 150 + 350); // 350ms buffer after card fade begins
+          }, order * 150 + 350);
           timeouts.push(t);
         });
 
-        observer.disconnect(); // trigger once only
+        observer.disconnect();
       },
       { threshold: 0.2 }
     );
@@ -175,15 +159,12 @@ const Currently = () => {
     >
       <div className="container-max px-6 sm:px-10 lg:px-16 py-16 sm:py-20 lg:py-24">
 
-        {/* Two-column grid: ~60/40 split on desktop, single column on mobile */}
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-16 lg:gap-20 items-start">
 
           {/* ── LEFT COLUMN ──────────────────────────────────────────────── */}
           <div>
-            {/* Eyebrow + heading — useSectionHeading adds scroll-triggered fade-up */}
             <div ref={headingRef} className="mb-10">
               <div className="flex items-center gap-3 mb-5">
-                {/* Thin olive vertical rule — ties to hero's off-grid vocabulary */}
                 <span
                   aria-hidden="true"
                   className="flex-shrink-0 w-px h-[18px] bg-[#39471F]/55"
@@ -207,7 +188,6 @@ const Currently = () => {
               </h2>
             </div>
 
-            {/* Body paragraphs — useScrollReveal staggers .reveal-target children */}
             <div ref={contentRef} className="flex flex-col gap-8">
               <p
                 className="reveal-target text-[17px] sm:text-[18px] text-[#3A3D2F] leading-[1.72]"
@@ -223,7 +203,6 @@ const Currently = () => {
                 list never really ends, and I've made peace with that.
               </p>
 
-              {/* Mustard left-border accent on the emphasized paragraph */}
               <p
                 className="reveal-target text-[17px] sm:text-[18px] text-[#3A3D2F] leading-[1.72]"
                 style={{
@@ -239,8 +218,7 @@ const Currently = () => {
             </div>
           </div>
 
-          {/* ── RIGHT COLUMN: Progress card ──────────────────────────────── */}
-          {/* Wrapper handles the opacity fade; inner div carries the rotation */}
+          {/* ── RIGHT COLUMN: olive card ──────────────────────────────────── */}
           <div
             style={{
               opacity: cardVisible ? 1 : 0,
