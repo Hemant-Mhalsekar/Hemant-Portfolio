@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useScrollReveal, useSectionHeading } from '../hooks/useGsapReveal';
+// useSectionHeading / useScrollReveal removed — this section drives
+// all entrance animations via CSS transitions + a single IntersectionObserver.
 
 // ── Data ───────────────────────────────────────────────────────────────────────
 const ITEMS = [
@@ -18,22 +19,23 @@ const DONE_INDICES = ITEMS.reduce((acc, item, i) => {
   return acc;
 }, []);
 
-// Computed once at module load — drives all reduced-motion branching
 const PREFERS_REDUCED =
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Animation timing constants (ms)
+const CARD_DELAY    = 300; // card entrance delay relative to section trigger
+const CARD_DURATION = 500; // card transition duration
+const STRIKE_BUFFER = 200; // gap between card finishing and strikes starting
+const STRIKE_START  = CARD_DELAY + CARD_DURATION + STRIKE_BUFFER; // 1000ms
+
 // ── Progress Card ──────────────────────────────────────────────────────────────
-// Olive background, Bricolage Grotesque items, mustard strike on done entries.
-// Deliberately different from the Hero terminal: no CLI chrome, display font,
-// olive palette instead of ink — same off-grid rotation language, different voice.
-const ProgressCard = React.forwardRef(({ struckItems }, ref) => (
+// Simplified from forwardRef — section observer now drives all timing.
+const ProgressCard = ({ struckItems }) => (
   <div
-    ref={ref}
     className="bg-[#39471F] px-9 py-10 sm:px-11 sm:py-11"
     style={{ transform: 'rotate(-1deg)' }}
   >
-    {/* Label — mono, small, mustard, no "$" prompt */}
     <p
       className="text-[11px] text-[#DE9F2E] tracking-[0.22em] uppercase mb-8"
       style={{ fontFamily: "'IBM Plex Mono', monospace" }}
@@ -41,28 +43,22 @@ const ProgressCard = React.forwardRef(({ struckItems }, ref) => (
       things I'm picking up
     </p>
 
-    {/* Item list */}
     <div className="flex flex-col gap-[18px]">
       {ITEMS.map((item, i) => {
         const isStruck = struckItems.has(i);
-
         const textOpacity =
           item.status === 'done' && isStruck ? 0.55 :
-          item.status === 'queued'            ? 0.40 :
-          1;
+          item.status === 'queued'            ? 0.40 : 1;
 
         return (
           <div key={i} className="flex items-center gap-3">
-
-            {/* Fixed-width marker column — dot only for in-progress,
-                keeps text left-edges aligned across all three states */}
+            {/* Fixed marker column — dot only for in-progress */}
             <span className="flex-shrink-0 w-3 flex items-center justify-center">
               {item.status === 'in-progress' && (
                 <span className="block w-[6px] h-[6px] rounded-full bg-[#DE9F2E]" />
               )}
             </span>
 
-            {/* Text + mustard strikethrough overlay */}
             <div className="relative flex-1 min-w-0">
               <span
                 className="block"
@@ -80,7 +76,6 @@ const ProgressCard = React.forwardRef(({ struckItems }, ref) => (
                 {item.text}
               </span>
 
-              {/* Mustard line — draws left-to-right via width 0% → 100% */}
               {item.status === 'done' && (
                 <span
                   aria-hidden="true"
@@ -92,8 +87,6 @@ const ProgressCard = React.forwardRef(({ struckItems }, ref) => (
                     width: isStruck ? '100%' : '0%',
                     backgroundColor: '#DE9F2E',
                     transform: 'translateY(-50%)',
-                    // Transition kept always-on so it fires reliably when
-                    // width changes. PREFERS_REDUCED → 'none' → instant.
                     transition: PREFERS_REDUCED ? 'none' : 'width 450ms ease',
                     pointerEvents: 'none',
                   }}
@@ -105,46 +98,46 @@ const ProgressCard = React.forwardRef(({ struckItems }, ref) => (
       })}
     </div>
   </div>
-));
-
-ProgressCard.displayName = 'ProgressCard';
+);
 
 // ── Currently Section ──────────────────────────────────────────────────────────
 const Currently = () => {
-  const headingRef = useSectionHeading();
-  const contentRef = useScrollReveal(0.15);
-  const cardRef    = useRef(null);
+  const sectionRef = useRef(null);
 
-  const [struckItems, setStruckItems] = useState(
-    () => (PREFERS_REDUCED ? new Set(DONE_INDICES) : new Set())
+  // PREFERS_REDUCED → start in final state (visible, all done items struck)
+  const [sectionVisible, setSectionVisible] = useState(PREFERS_REDUCED);
+  const [struckItems,    setStruckItems]    = useState(
+    () => PREFERS_REDUCED ? new Set(DONE_INDICES) : new Set()
   );
-  const [cardVisible, setCardVisible] = useState(PREFERS_REDUCED);
 
+  // ── Entrance + checklist observer ─────────────────────────────────────────
   useEffect(() => {
-    if (PREFERS_REDUCED || !cardRef.current) return;
+    // Reduced motion: state initializers handle final state — nothing to do
+    if (PREFERS_REDUCED || !sectionRef.current) return;
 
-    const card = cardRef.current;
     const timeouts = [];
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
 
-        setCardVisible(true);
+        // 1. Trigger all CSS entrance transitions
+        setSectionVisible(true);
 
+        // 2. After card finishes entering, start staggered strikes
         DONE_INDICES.forEach((itemIdx, order) => {
           const t = setTimeout(() => {
             setStruckItems((prev) => new Set([...prev, itemIdx]));
-          }, order * 150 + 350);
+          }, STRIKE_START + order * 150);
           timeouts.push(t);
         });
 
-        observer.disconnect();
+        observer.disconnect(); // fire once only
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
 
-    observer.observe(card);
+    observer.observe(sectionRef.current);
 
     return () => {
       observer.disconnect();
@@ -152,9 +145,31 @@ const Currently = () => {
     };
   }, []);
 
+  // ── CSS transition style factories ────────────────────────────────────────
+  // Close over `sectionVisible` so each call reflects current state.
+
+  // Fade + translateY — for eyebrow, heading, body paragraph
+  const fadeUp = (delayMs, durationMs = 550, ty = 20) => ({
+    opacity:    sectionVisible ? 1 : 0,
+    transform:  sectionVisible ? 'translateY(0)' : `translateY(${ty}px)`,
+    transition: PREFERS_REDUCED
+      ? 'none'
+      : `opacity ${durationMs}ms ease ${delayMs}ms, transform ${durationMs}ms ease ${delayMs}ms`,
+  });
+
+  // Fade + translateX from right — for the card column
+  const fadeRight = (delayMs = 300, durationMs = 500) => ({
+    opacity:    sectionVisible ? 1 : 0,
+    transform:  sectionVisible ? 'translateX(0)' : 'translateX(24px)',
+    transition: PREFERS_REDUCED
+      ? 'none'
+      : `opacity ${durationMs}ms ease ${delayMs}ms, transform ${durationMs}ms ease ${delayMs}ms`,
+  });
+
   return (
     <section
       id="currently"
+      ref={sectionRef}
       className="bg-[#F1ECDD] border-t border-[#3A3D2F]/10"
     >
       <div className="container-max px-6 sm:px-10 lg:px-16 py-16 sm:py-20 lg:py-24">
@@ -163,35 +178,47 @@ const Currently = () => {
 
           {/* ── LEFT COLUMN ──────────────────────────────────────────────── */}
           <div>
-            <div ref={headingRef} className="mb-10">
-              <div className="flex items-center gap-3 mb-5">
-                <span
-                  aria-hidden="true"
-                  className="flex-shrink-0 w-px h-[18px] bg-[#39471F]/55"
-                />
-                <p
-                  className="text-[11px] text-[#39471F] tracking-[0.22em] uppercase"
-                  style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-                >
-                  // currently
-                </p>
-              </div>
 
-              <h2
-                className="font-black text-[#15180F] leading-[1.05] tracking-tight"
-                style={{
-                  fontFamily: "'Bricolage Grotesque', sans-serif",
-                  fontSize: 'clamp(2rem, 3.5vw, 2.5rem)',
-                }}
+            {/* 1 ▸ Eyebrow — fade + up 16px, 0ms delay */}
+            <div
+              className="flex items-center gap-3 mb-5"
+              style={fadeUp(0, 500, 16)}
+            >
+              <span
+                aria-hidden="true"
+                className="flex-shrink-0 w-px h-[18px] bg-[#39471F]/55"
+              />
+              <p
+                className="text-[11px] text-[#39471F] tracking-[0.22em] uppercase"
+                style={{ fontFamily: "'IBM Plex Mono', monospace" }}
               >
-                What I'm up to
-              </h2>
+                // currently
+              </p>
             </div>
 
-            <div ref={contentRef} className="flex flex-col gap-8">
+            {/* 2 ▸ Heading — fade + up 20px, 110ms delay */}
+            <h2
+              className="font-black text-[#15180F] leading-[1.05] tracking-tight"
+              style={{
+                fontFamily: "'Bricolage Grotesque', sans-serif",
+                fontSize: 'clamp(2rem, 3.5vw, 2.5rem)',
+                marginBottom: '2.5rem',
+                ...fadeUp(110, 550, 20),
+              }}
+            >
+              What I'm up to
+            </h2>
+
+            <div className="flex flex-col gap-8">
+
+              {/* 3 ▸ Body paragraph — fade + up 20px, 220ms delay */}
               <p
-                className="reveal-target text-[17px] sm:text-[18px] text-[#3A3D2F] leading-[1.72]"
-                style={{ fontFamily: "'Work Sans', sans-serif", maxWidth: '60ch' }}
+                className="text-[17px] sm:text-[18px] text-[#3A3D2F] leading-[1.72]"
+                style={{
+                  fontFamily: "'Work Sans', sans-serif",
+                  maxWidth: '60ch',
+                  ...fadeUp(220, 550, 20),
+                }}
               >
                 Right now I'm deep in AWS — IAM, S3, EC2 — because a project I'm
                 building needed it, and I'd rather actually understand it than just know
@@ -203,30 +230,50 @@ const Currently = () => {
                 list never really ends, and I've made peace with that.
               </p>
 
-              <p
-                className="reveal-target text-[17px] sm:text-[18px] text-[#3A3D2F] leading-[1.72]"
+              {/* 4 ▸ Quote block — fade in at 340ms; border grows at 440ms
+                  The wrapper fades in, revealing the border span which simultaneously
+                  grows from scaleY(0) → scaleY(1) via a slightly later delay. */}
+              <div
+                className="relative"
                 style={{
-                  fontFamily: "'Work Sans', sans-serif",
+                  paddingLeft: '19px', // 3px border + 16px gap
                   maxWidth: '60ch',
-                  borderLeft: '3px solid #DE9F2E',
-                  paddingLeft: '16px',
+                  opacity:    sectionVisible ? 1 : 0,
+                  transition: PREFERS_REDUCED ? 'none' : 'opacity 500ms ease 340ms',
                 }}
               >
-                Right now I'm looking for a full-time software development role where I
-                can keep building things end to end.
-              </p>
+                {/* Border line — grows downward via scaleY */}
+                <span
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: '3px',
+                    backgroundColor: '#DE9F2E',
+                    transformOrigin: 'top center',
+                    transform:  sectionVisible ? 'scaleY(1)' : 'scaleY(0)',
+                    transition: PREFERS_REDUCED ? 'none' : 'transform 500ms ease 440ms',
+                  }}
+                />
+                <p
+                  className="text-[17px] sm:text-[18px] text-[#3A3D2F] leading-[1.72]"
+                  style={{ fontFamily: "'Work Sans', sans-serif" }}
+                >
+                  Right now I'm looking for a full-time software development role where I
+                  can keep building things end to end.
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* ── RIGHT COLUMN: olive card ──────────────────────────────────── */}
-          <div
-            style={{
-              opacity: cardVisible ? 1 : 0,
-              transition: PREFERS_REDUCED ? 'none' : 'opacity 500ms ease',
-            }}
-          >
-            <ProgressCard ref={cardRef} struckItems={struckItems} />
+          {/* ── RIGHT COLUMN ─────────────────────────────────────────────── */}
+          {/* 5 ▸ Card — fade + slide 24px from right, 300ms delay */}
+          <div style={fadeRight(300, 500)}>
+            <ProgressCard struckItems={struckItems} />
           </div>
+
         </div>
       </div>
     </section>
