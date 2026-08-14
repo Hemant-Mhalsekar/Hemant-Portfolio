@@ -8,6 +8,7 @@ import Projects from './sections/Projects';
 import WorkWithMe from './sections/WorkWithMe';
 import ExperienceEducation from './sections/ExperienceEducation';
 import Currently from './sections/Currently';
+import WhatIBuild from './sections/WhatIBuild';
 import Contact from './sections/Contact';
 import CursorGlow from './components/CursorGlow';
 import SmoothScroll from './components/SmoothScroll';
@@ -20,6 +21,7 @@ const App = () => {
       <main className="relative z-10">
         <Hero />
         <Currently />
+        <WhatIBuild />
         <About />
         <Skills />
         <Projects />
