@@ -1,208 +1,192 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Work With Me', href: '#work-with-me' },
-  { label: 'Contact', href: '#contact' },
+// ── Navigation links ───────────────────────────────────────────────────────────
+// sectionId = the DOM id to observe / scroll to
+const NAV_LINKS = [
+  { label: 'Home',    href: '#hero',     sectionId: 'hero'     },
+  { label: 'Work',    href: '#projects', sectionId: 'projects' },
+  { label: 'About',   href: '#about',    sectionId: 'about'    },
+  { label: 'Contact', href: '#contact',  sectionId: 'contact'  },
 ];
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
-  const navRef = useRef(null);
+  const [menuOpen,       setMenuOpen]       = useState(false);
+  const [activeSection,  setActiveSection]  = useState('hero');
+  const navRef        = useRef(null);
   const mobileMenuRef = useRef(null);
 
-  // Entrance animation
+  // ── Entrance animation ──────────────────────────────────────────────────────
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!prefersReduced) {
-      gsap.fromTo(
-        navRef.current,
-        { y: -70, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out', delay: 0.1 }
-      );
-    }
+    if (prefersReduced || !navRef.current) return;
+    gsap.fromTo(
+      navRef.current,
+      { y: -56, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out', delay: 0.1 }
+    );
   }, []);
 
-  // Background blur scroll listener
+  // ── Active section tracking via IntersectionObserver ───────────────────────
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Intersection Observer for Active Section Tracking
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      // Top 25% to bottom 55%: section must occupy the upper-center of the viewport
-      rootMargin: '-15% 0px -55% 0px',
-      threshold: 0,
-    };
-
-    const observerCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          // Special handler for hero vs normal sections
-          const id = entry.target.id === 'hero' ? 'home' : entry.target.id;
-          if (navLinks.some(link => link.href === `#${id}`)) {
-             setActiveSection(id);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
           }
-        }
-      });
-    };
+        });
+      },
+      { rootMargin: '-15% 0px -55% 0px', threshold: 0 }
+    );
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    
-    // Select all main sections to observe
-    const sectionIds = ['hero', 'about', 'skills', 'projects', 'work-with-me', 'contact'];
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
+    NAV_LINKS.forEach(({ sectionId }) => {
+      const el = document.getElementById(sectionId);
       if (el) observer.observe(el);
     });
 
     return () => observer.disconnect();
   }, []);
 
-  // Mobile menu animation
+  // ── Mobile menu entrance animation ─────────────────────────────────────────
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!mobileMenuRef.current || prefersReduced) return;
-
-    if (menuOpen) {
-      gsap.fromTo(
-        mobileMenuRef.current,
-        { opacity: 0, y: -20 },
-        { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
-      );
-    }
+    if (!mobileMenuRef.current || prefersReduced || !menuOpen) return;
+    gsap.fromTo(
+      mobileMenuRef.current,
+      { opacity: 0, y: -10 },
+      { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out' }
+    );
   }, [menuOpen]);
 
-  // Prevent body scroll when menu open
+  // ── Body scroll lock while mobile menu is open ──────────────────────────────
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
-  const handleNavClick = (e, href) => {
+  // ── Smooth scroll handler ───────────────────────────────────────────────────
+  const handleNavClick = (e, sectionId) => {
     e.preventDefault();
     setMenuOpen(false);
-    
-    // Special handling for home
-    if (href === '#home') {
+    if (sectionId === 'hero') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
-
-    const target = document.querySelector(href);
+    const target = document.getElementById(sectionId);
     if (target) {
-      const offset = 72; // standard nav offset
-      const top = target.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: 'smooth' });
+      window.scrollTo({
+        top: target.getBoundingClientRect().top + window.scrollY - 56, // 56px = nav height
+        behavior: 'smooth',
+      });
     }
   };
 
   return (
     <>
+      {/* ── Persistent top bar ─────────────────────────────────────────────── */}
       <nav
         ref={navRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-[#0f1117]/95 backdrop-blur-md border-b border-[#1e2638] shadow-lg shadow-black/20 py-4'
-            : 'bg-transparent py-5'
-        }`}
+        className="fixed top-0 left-0 right-0 z-50 bg-[#F1ECDD] border-b border-[#3A3D2F]/15 h-14"
       >
-        <div className="container-max flex items-center justify-between px-6 h-full">
+        <div className="container-max h-full flex items-center justify-between px-6 sm:px-10 lg:px-16">
+
           {/* Logo */}
           <a
-            href="#home"
-            onClick={(e) => handleNavClick(e, '#home')}
-            className="font-bold text-xl text-white tracking-tight hover:text-indigo-400 transition-colors duration-200"
+            href="#hero"
+            onClick={(e) => handleNavClick(e, 'hero')}
+            className="text-[11px] tracking-[0.22em] uppercase text-[#3A3D2F] hover:text-[#15180F] transition-colors duration-200"
+            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
           >
-            Hemant<span className="text-indigo-400">.</span>
+            hemant.dev
           </a>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-2">
-            {navLinks.map((link) => {
-              const sectionId = link.href.slice(1);
+          {/* Desktop links */}
+          <div
+            className="hidden md:flex items-center gap-8"
+            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+          >
+            {NAV_LINKS.map(({ label, href, sectionId }) => {
               const isActive = activeSection === sectionId;
-              
               return (
                 <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className={`relative px-4 py-2 rounded-lg text-sm transition-all duration-300 ${
+                  key={sectionId}
+                  href={href}
+                  onClick={(e) => handleNavClick(e, sectionId)}
+                  className={`text-[11px] tracking-[0.18em] uppercase pb-px transition-all duration-200 ${
                     isActive
-                      ? 'text-indigo-400 font-semibold bg-indigo-500/10 after:absolute after:bottom-0 after:left-3 after:right-3 after:h-[2px] after:rounded-full after:bg-indigo-500/70'
-                      : 'text-slate-400 font-medium hover:text-white hover:bg-white/5'
+                      ? 'text-[#15180F] font-semibold border-b border-[#15180F]'
+                      : 'text-[#3A3D2F] font-medium border-b border-transparent hover:text-[#15180F] hover:border-[#3A3D2F]/40'
                   }`}
                 >
-                  {link.label}
+                  {label}
                 </a>
               );
             })}
           </div>
 
-          {/* Hamburger */}
+          {/* Mobile hamburger — thin editorial lines */}
           <button
-            className="md:hidden flex flex-col gap-1.5 p-2 rounded-lg hover:bg-white/5 transition-colors z-50 relative"
+            className="md:hidden flex flex-col justify-between h-[13px] w-[18px] hover:opacity-60 transition-opacity"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           >
             <span
-              className={`block h-0.5 w-6 bg-slate-300 transition-transform duration-300 ${
-                menuOpen ? 'rotate-45 translate-y-2' : ''
+              className={`block h-px w-full bg-[#15180F] transition-transform duration-300 origin-center ${
+                menuOpen ? 'rotate-45 translate-y-[6px]' : ''
               }`}
             />
             <span
-              className={`block h-0.5 w-6 bg-slate-300 transition-opacity duration-300 ${
+              className={`block h-px w-full bg-[#15180F] transition-opacity duration-300 ${
                 menuOpen ? 'opacity-0' : ''
               }`}
             />
             <span
-              className={`block h-0.5 w-6 bg-slate-300 transition-transform duration-300 ${
-                menuOpen ? '-rotate-45 -translate-y-2' : ''
+              className={`block h-px w-full bg-[#15180F] transition-transform duration-300 origin-center ${
+                menuOpen ? '-rotate-45 -translate-y-[6px]' : ''
               }`}
             />
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* ── Mobile fullscreen menu ─────────────────────────────────────────── */}
       {menuOpen && (
         <div
           ref={mobileMenuRef}
-          className="fixed inset-0 z-40 bg-[#0f1117]/98 backdrop-blur-xl flex flex-col items-center justify-center px-8"
+          className="fixed inset-0 z-40 bg-[#F1ECDD] flex flex-col justify-center px-8 pt-14"
         >
-          <nav className="flex flex-col gap-4 w-full max-w-sm text-center">
-            {navLinks.map((link) => {
-              const sectionId = link.href.slice(1);
+          <nav className="flex flex-col gap-1">
+            {NAV_LINKS.map(({ label, href, sectionId }) => {
               const isActive = activeSection === sectionId;
-
               return (
                 <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className={`text-2xl py-3 border-b border-white/5 transition-all duration-300 ${
-                    isActive
-                      ? 'text-indigo-400 font-bold pl-4 border-l-2 border-l-indigo-500'
-                      : 'text-slate-300 font-semibold pl-0 border-l-0 hover:text-indigo-400 hover:pl-2'
+                  key={sectionId}
+                  href={href}
+                  onClick={(e) => handleNavClick(e, sectionId)}
+                  className={`py-4 border-b border-[#3A3D2F]/10 transition-colors duration-200 ${
+                    isActive ? 'text-[#15180F]' : 'text-[#3A3D2F]/60 hover:text-[#15180F]'
                   }`}
+                  style={{
+                    fontFamily: "'Bricolage Grotesque', sans-serif",
+                    fontSize: '2.6rem',
+                    fontWeight: 800,
+                    lineHeight: 1,
+                  }}
                 >
-                  {link.label}
+                  {label}
                 </a>
               );
             })}
           </nav>
+
+          {/* Subtle footer tag in mobile menu */}
+          <p
+            className="mt-12 text-[10px] text-[#3A3D2F]/35 tracking-[0.2em] uppercase"
+            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+          >
+            hemant.dev · 2026
+          </p>
         </div>
       )}
     </>

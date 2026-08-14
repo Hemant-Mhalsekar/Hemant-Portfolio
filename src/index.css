@@ -1,21 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  --color-dark: #0f1117;
-  --color-dark-card: #161b27;
-  --color-dark-border: #1e2638;
-  --color-accent: #6366f1;
-  --color-accent-light: #818cf8;
-  --color-accent-muted: #6366f120;
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
-  --font-inter: 'Inter', sans-serif;
+  /* ── Dark-section palette (kept for backward compat) ─────────────────────── */
+  --color-dark:             #0f1117;
+  --color-dark-card:        #161b27;
+  --color-dark-border:      #1e2638;
+  --color-text-primary:     #f1f5f9;
+  --color-text-secondary:   #94a3b8;
+  --color-text-muted:       #64748b;
+
+  /* ── Editorial palette ──────────────────────────────────────────────────── */
+  --color-cream:            #F1ECDD;
+  --color-ink:              #15180F;
+  --color-olive:            #39471F;
+  --color-mustard:          #DE9F2E;
+  --color-text-onlight:     #3A3D2F;
+  --color-text-ondark:      #CBD3B8;
+
+  /* ── Type system ────────────────────────────────────────────────────────── */
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+  --font-body:    'Work Sans', sans-serif;
+  --font-inter:   'Inter', sans-serif;
+}
+
+/* Terminal cursor blink — defined top-level so it is always registered */
+@keyframes terminal-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
 @layer base {
   html {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Work Sans', 'Inter', sans-serif;
   }
 
   body {
@@ -55,12 +72,13 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #6366f1;
+    background: #DE9F2E;
     border-radius: 3px;
   }
 }
 
 @layer utilities {
+  /* Legacy gradient text (used by dark sections — kept for backward compat) */
   .gradient-text {
     background: linear-gradient(135deg, #6366f1 0%, #818cf8 50%, #c084fc 100%);
     -webkit-background-clip: text;
@@ -68,6 +86,7 @@
     background-clip: text;
   }
 
+  /* Responsive section spacing */
   .section-padding {
     padding: 3rem 1.25rem;
   }
@@ -84,12 +103,14 @@
     }
   }
 
+  /* Max-width container */
   .container-max {
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
   }
 
+  /* Legacy card effects (used by dark-theme sections) */
   .card-hover {
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
@@ -102,5 +123,25 @@
 
   .glow-accent {
     box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+  }
+
+  /* ── Terminal cursor ─────────────────────────────────────────────────────── */
+  .terminal-cursor {
+    animation: terminal-blink 1s step-end infinite;
+  }
+
+  /* ── Terminal widget positioning ─────────────────────────────────────────── */
+  /* Mobile: sits below text content with gap */
+  .terminal-positioned {
+    margin-top: 2.5rem;
+  }
+
+  /* Desktop (lg+): rotated off-grid, pinned to top of flex row with margin offset */
+  @media (min-width: 1024px) {
+    .terminal-positioned {
+      margin-top: 2rem;
+      align-self: flex-start;
+      transform: rotate(-2deg);
+    }
   }
 }
