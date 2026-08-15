@@ -136,4 +136,38 @@
       transform: rotate(-2deg);
     }
   }
+
+  /* ── Subtle Polish Animations ────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: no-preference) {
+    /* Random slight shifts for the noise overlay to feel alive but not too rapid */
+    @keyframes noise-shift {
+      0% { transform: translate(0, 0); }
+      10% { transform: translate(-2px, -3px); }
+      20% { transform: translate(1px, 2px); }
+      30% { transform: translate(-3px, -1px); }
+      40% { transform: translate(2px, 3px); }
+      50% { transform: translate(-1px, -2px); }
+      60% { transform: translate(3px, 1px); }
+      70% { transform: translate(-2px, 2px); }
+      80% { transform: translate(2px, -3px); }
+      90% { transform: translate(-3px, 2px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .noise-animate {
+      animation: noise-shift 8s steps(4) infinite;
+    }
+
+    @keyframes drift {
+      0% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+      100% { transform: rotate(-3deg); }
+    }
+
+    /* We combine this with the gsap entrance rotation in Hero if applied on an inner wrapper, 
+       but here we'll just apply it directly. */
+    .idle-drift {
+      animation: drift 7s ease-in-out infinite;
+    }
+  }
 }

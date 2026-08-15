@@ -212,7 +212,11 @@ const ProjectBlock = ({ project, index, isExpanded, onToggle }) => {
           <div style={{ overflow: 'hidden', minHeight: 0 }}>
 
             {/* Story content — shown only when expanded */}
-            <div className="pb-12 sm:pb-14 lg:pb-16">
+            <div
+              className={`pb-12 sm:pb-14 lg:pb-16 transition-all duration-450 ease-out delay-100 motion-reduce:transition-none ${
+                isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[10px]'
+              }`}
+            >
 
               {/* Three-part story: each pair is its own 2-col grid */}
               <div className="flex flex-col gap-8 sm:gap-10">

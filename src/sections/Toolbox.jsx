@@ -106,7 +106,7 @@ const Toolbox = () => {
                 }}
               >
                 <span
-                  className="inline-block px-3 py-1.5 border border-[#F1ECDD]/40 text-[#F1ECDD] rounded-[4px] whitespace-nowrap"
+                  className="inline-block px-3 py-1.5 border border-[#F1ECDD]/40 text-[#F1ECDD] rounded-[4px] whitespace-nowrap hover:scale-[1.03] hover:border-[#DE9F2E] hover:border-opacity-100 transition-all duration-150 motion-reduce:transition-none cursor-default"
                   style={{
                     fontFamily: "'IBM Plex Mono', monospace",
                     fontSize:   '13px',
@@ -136,7 +136,7 @@ const Toolbox = () => {
               {COMFORTABLE.map(tool => (
                 <span
                   key={`comfort-${tool}`}
-                  className="px-3 py-1.5 bg-[#DE9F2E] text-[#39471F] rounded-[4px] font-semibold whitespace-nowrap"
+                  className="px-3 py-1.5 bg-[#DE9F2E] text-[#39471F] rounded-[4px] font-semibold whitespace-nowrap hover:scale-[1.03] hover:brightness-105 transition-all duration-150 motion-reduce:transition-none cursor-default"
                   style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '12px', lineHeight: 1 }}
                 >
                   {tool}
@@ -157,7 +157,7 @@ const Toolbox = () => {
               {IMPROVING.map(tool => (
                 <span
                   key={`improve-${tool}`}
-                  className="px-3 py-1.5 border border-dashed border-[#DE9F2E] text-[#DE9F2E] rounded-[4px] whitespace-nowrap"
+                  className="px-3 py-1.5 border border-dashed border-[#DE9F2E]/60 text-[#DE9F2E] rounded-[4px] whitespace-nowrap hover:scale-[1.03] hover:border-[#DE9F2E] hover:border-opacity-100 hover:border-solid transition-all duration-150 motion-reduce:transition-none cursor-default"
                   style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '12px', lineHeight: 1 }}
                 >
                   {tool}

@@ -11,11 +11,13 @@ import Experience from './sections/Experience';
 import BeyondCode from './sections/BeyondCode';
 import Contact from './sections/Contact';
 import SmoothScroll from './components/SmoothScroll';
+import NoiseOverlay from './components/NoiseOverlay';
 
 const App = () => {
   return (
     <SmoothScroll>
       <div className="min-h-screen bg-[var(--color-cream)] text-[var(--color-text-onlight)] relative">
+        <NoiseOverlay />
         <Navbar />
       <main className="relative z-10">
         <Hero />

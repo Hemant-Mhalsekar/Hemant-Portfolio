@@ -156,7 +156,7 @@ const Experience = () => {
                       {item.role}
                     </h3>
                     <span
-                      className="text-[#DE9F2E] text-[12px] flex-shrink-0 transition-colors duration-200"
+                      className="text-[#DE9F2E] text-[12px] flex-shrink-0 transition-all duration-200 group-hover:translate-x-[2px] group-hover:brightness-110 motion-reduce:transition-none"
                       style={{ fontFamily: "'IBM Plex Mono', monospace" }}
                     >
                       {isOpen ? '- close' : '+ details'}
@@ -165,13 +165,15 @@ const Experience = () => {
 
                   {/* Accordion Body */}
                   <div
-                    className={`grid transition-all duration-400 ease-in-out ${
-                      isOpen ? 'grid-rows-[1fr] mt-4 opacity-100' : 'grid-rows-[0fr] mt-0 opacity-0'
+                    className={`grid transition-all duration-400 ease-in-out motion-reduce:transition-none ${
+                      isOpen ? 'grid-rows-[1fr] mt-4' : 'grid-rows-[0fr] mt-0'
                     }`}
                   >
                     <div className="overflow-hidden">
                       <p
-                        className="text-[#CBD3B8] leading-relaxed max-w-[65ch]"
+                        className={`text-[#CBD3B8] leading-relaxed max-w-[65ch] transition-all duration-400 ease-out delay-100 motion-reduce:transition-none ${
+                          isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[8px]'
+                        }`}
                         style={{
                           fontFamily: "'Work Sans', sans-serif",
                           fontSize: 'clamp(0.95rem, 1.5vw, 1.05rem)',
