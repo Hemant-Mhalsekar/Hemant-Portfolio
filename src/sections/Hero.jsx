@@ -346,7 +346,7 @@ const Hero = () => {
           </div>
 
           {/* ── Right: Terminal widget, Status Chip, & Scroll cue ─────────────────────────── */}
-          <div className="flex flex-col items-center lg:items-end gap-16 lg:gap-0 lg:justify-between mt-10 lg:mt-0 lg:pb-4 w-full lg:w-auto h-full lg:min-h-[600px]">
+          <div className="flex flex-col items-center lg:items-end gap-16 lg:gap-0 lg:justify-between mt-10 lg:mt-0 lg:pb-4 w-full lg:w-auto h-full lg:min-h-[530px]">
             {/* .terminal-positioned in index.css applies margins and rotation */}
             <div
               ref={terminalRef}
@@ -377,7 +377,7 @@ const Hero = () => {
             {/* Scroll Cue (Fades in slightly after terminal, placed at bottom) */}
             <div 
               ref={scrollCueRef}
-              className="flex flex-col items-center mt-12 lg:mt-8 lg:mr-32"
+              className="flex flex-col items-center mt-12 lg:mt-5 lg:mr-32"
               style={{ opacity: 0 }}
             >
               <div className="relative flex justify-center w-[8px] h-[75px]">
