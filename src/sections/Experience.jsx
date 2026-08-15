@@ -156,7 +156,7 @@ const Experience = () => {
                       {item.role}
                     </h3>
                     <span
-                      className={`text-[12px] flex-shrink-0 transition-colors duration-200 ${isOpen ? 'text-[#DE9F2E]' : 'text-[#39471F]'}`}
+                      className="text-[#DE9F2E] text-[12px] flex-shrink-0 transition-colors duration-200"
                       style={{ fontFamily: "'IBM Plex Mono', monospace" }}
                     >
                       {isOpen ? '- close' : '+ details'}
