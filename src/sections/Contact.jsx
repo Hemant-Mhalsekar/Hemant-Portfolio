@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 
 const SOCIAL_LINKS = [
-  { label: 'Email me', href: 'mailto:hemantmhalsekar1@gmail.com' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/hemant-mhalsekar-464a50244/' },
-  { label: 'GitHub', href: 'https://github.com/Hemant-Mhalsekar' },
-  { label: 'Resume', href: '/resume.pdf', isDownload: true }
+  { id: 'email', label: <>Say hey <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(Email)</span></>, href: 'mailto:hemantmhalsekar1@gmail.com' },
+  { id: 'linkedin', label: 'LinkedIn, if you must', href: 'https://www.linkedin.com/in/hemant-mhalsekar-464a50244/' },
+  { id: 'github', label: <>See the code <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(GitHub)</span></>, href: 'https://github.com/Hemant-Mhalsekar' },
+  { id: 'resume', label: <>Grab the resume <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(PDF)</span></>, href: '/resume.pdf', isDownload: true }
 ];
 
 const PREFERS_REDUCED =
@@ -99,7 +99,7 @@ const Contact = () => {
           </div>
 
           <h2
-            className="font-black leading-[1.0] tracking-tight text-[#F1ECDD] mb-6"
+            className="relative w-fit font-black leading-[1.0] tracking-tight text-[#F1ECDD] mb-6"
             style={{
               fontFamily: "'Bricolage Grotesque', sans-serif",
               fontSize: 'clamp(2.5rem, 4.5vw, 3.75rem)',
@@ -107,6 +107,18 @@ const Contact = () => {
             }}
           >
             Have something<br className="hidden sm:block" /> worth building?
+            
+            <span
+              className="absolute -top-6 -right-8 sm:-right-12 bg-[#DE9F2E] text-[#39471F] uppercase tracking-wider font-semibold rounded-sm"
+              style={{
+                fontFamily: "'IBM Plex Mono', monospace",
+                fontSize: '12px',
+                padding: '6px 14px',
+                transform: 'rotate(-3deg)',
+              }}
+            >
+              say hi
+            </span>
           </h2>
 
           <p
@@ -225,10 +237,10 @@ const Contact = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {SOCIAL_LINKS.map((link) => (
                 <a
-                  key={link.label}
+                  key={link.id}
                   href={link.href}
-                  target={link.label !== 'Email me' ? '_blank' : undefined}
-                  rel={link.label !== 'Email me' ? 'noopener noreferrer' : undefined}
+                  target={link.id !== 'email' ? '_blank' : undefined}
+                  rel={link.id !== 'email' ? 'noopener noreferrer' : undefined}
                   download={link.isDownload ? '' : undefined}
                   className="flex items-center justify-start px-5 py-4 border border-[#DE9F2E] text-[#F1ECDD] hover:bg-[#DE9F2E] hover:text-[#15180F] transition-colors duration-200"
                   style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '14px' }}

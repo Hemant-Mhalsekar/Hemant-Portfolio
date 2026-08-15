@@ -10,7 +10,7 @@ const PROJECTS = [
   {
     id:   '01',
     name: 'Veyra',
-    tags: ['react', 'node.js', 'express', 'mongodb', 'jwt', 'cloudinary'],
+    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Cloudinary'],
     link: 'https://verya-launch.netlify.app/',
     hook: 'Built a bilingual e-commerce platform for a Kuwaiti brand, then hit the wall between local and production.',
     problem:
@@ -23,7 +23,7 @@ const PROJECTS = [
   {
     id:   '02',
     name: 'Real-Time AI Surveillance System',
-    tags: ['python', 'yolov8', 'bytetrack', 'opencv', 'pytorch', 'scikit-learn', 'flask'],
+    tags: ['Python', 'YOLOv8', 'ByteTrack', 'OpenCV', 'PyTorch', 'Scikit-learn', 'Flask'],
     link: 'https://real-time-ai-surveillance-system.onrender.com/',
     hook: "Started with a hunch that a hotel's camera system wasn't smart enough. Ended up training my own classifier.",
     problem:
@@ -36,7 +36,7 @@ const PROJECTS = [
   {
     id:   '03',
     name: 'TaskPilot',
-    tags: ['react', 'node.js', 'express', 'mongodb', 'socket.io', 'groq'],
+    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'Socket.io', 'Groq'],
     link: 'https://taskpilot-task-manager.netlify.app/login',
     hook: 'Built a Kanban board that thinks about priority for you, then ran into a hard limit of serverless hosting.',
     problem:
@@ -49,7 +49,7 @@ const PROJECTS = [
   {
     id:   '04',
     name: 'CO-PO Mapper',
-    tags: ['react', 'zustand', 'sheetjs', 'react-to-print'],
+    tags: ['React', 'Zustand', 'SheetJS', 'react-to-print'],
     link: 'https://co-po-pos-mapping.netlify.app/',
     hook: 'Built a tool with no backend on purpose, because for this one, the constraint was the whole point.',
     problem:
@@ -62,7 +62,7 @@ const PROJECTS = [
   {
     id:   '05',
     name: 'Shortify',
-    tags: ['java', 'spring boot', 'mysql', 'spring security', 'jwt'],
+    tags: ['Java', 'Spring Boot', 'MySQL', 'Spring Security', 'JWT'],
     link: 'https://shortify-url-shortener-alpha.vercel.app/',
     hook: 'Wanted to actually learn Spring Boot, not just use it for DSA. This is what came out of it.',
     problem:
