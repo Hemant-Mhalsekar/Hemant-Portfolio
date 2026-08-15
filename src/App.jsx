@@ -2,17 +2,13 @@ import React from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Hero from './sections/Hero';
-import About from './sections/About';
-import Skills from './sections/Skills';
-import Projects from './sections/Projects';
-import WorkWithMe from './sections/WorkWithMe';
-import ExperienceEducation from './sections/ExperienceEducation';
 import Currently from './sections/Currently';
 import WhatIBuild from './sections/WhatIBuild';
 import SelectedWork from './sections/SelectedWork';
 import HowIBuild from './sections/HowIBuild';
 import Toolbox from './sections/Toolbox';
 import Experience from './sections/Experience';
+import BeyondCode from './sections/BeyondCode';
 import Contact from './sections/Contact';
 import CursorGlow from './components/CursorGlow';
 import SmoothScroll from './components/SmoothScroll';
@@ -30,7 +26,7 @@ const App = () => {
         <HowIBuild />
         <Toolbox />
         <Experience />
-        <About />
+        <BeyondCode />
         <Contact />
       </main>
       <Footer />
