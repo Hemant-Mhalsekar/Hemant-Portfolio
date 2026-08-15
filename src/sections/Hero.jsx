@@ -83,7 +83,7 @@ const TerminalWidget = () => {
       </div>
 
       {/* Terminal body */}
-      <div className="px-7 py-7 space-y-1 min-h-[200px]">
+      <div className="px-7 py-7 space-y-1 min-h-[240px]">
 
         {/* Completed lines */}
         {lines.map((l, i) => (
@@ -283,7 +283,7 @@ const Hero = () => {
               className="font-black leading-[0.93] tracking-tight text-[#15180F] mb-8"
               style={{
                 fontFamily: "'Bricolage Grotesque', sans-serif",
-                fontSize: 'clamp(2.75rem, 5.8vw, 5.5rem)',
+                fontSize: 'clamp(2.4rem, 5vw, 4.8rem)',
                 opacity: 0,
               }}
             >
