@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 
 const SOCIAL_LINKS = [
-  { label: 'Email', value: 'hemantmhalsekar1@gmail.com', href: 'mailto:hemantmhalsekar1@gmail.com' },
-  { label: 'LinkedIn', value: 'linkedin.com/in/hemant-mhalsekar-464a50244', href: 'https://www.linkedin.com/in/hemant-mhalsekar-464a50244/' },
-  { label: 'GitHub', value: 'github.com/Hemant-Mhalsekar', href: 'https://github.com/Hemant-Mhalsekar' },
-  { label: 'Resume', value: 'Download PDF', href: '/resume.pdf', isDownload: true }
+  { label: 'Email me', href: 'mailto:hemantmhalsekar1@gmail.com' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/hemant-mhalsekar-464a50244/' },
+  { label: 'GitHub', href: 'https://github.com/Hemant-Mhalsekar' },
+  { label: 'Resume', href: '/resume.pdf', isDownload: true }
 ];
 
 const PREFERS_REDUCED =
@@ -222,36 +222,18 @@ const Contact = () => {
 
           {/* Right: Direct Links */}
           <div style={fadeUp(450, 600, 24)} className="flex flex-col">
-            <div className="flex flex-col border-t border-[#39471F]/40">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {SOCIAL_LINKS.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  target={link.label !== 'Email' ? '_blank' : undefined}
-                  rel={link.label !== 'Email' ? 'noopener noreferrer' : undefined}
+                  target={link.label !== 'Email me' ? '_blank' : undefined}
+                  rel={link.label !== 'Email me' ? 'noopener noreferrer' : undefined}
                   download={link.isDownload ? '' : undefined}
-                  className="group flex flex-row items-center justify-between py-4 border-b border-[#39471F]/40 hover:bg-[#F1ECDD]/[0.02] transition-colors"
+                  className="flex items-center justify-start px-5 py-4 border border-[#DE9F2E] text-[#F1ECDD] hover:bg-[#DE9F2E] hover:text-[#15180F] transition-colors duration-200"
+                  style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '14px' }}
                 >
-                  <div className="flex flex-col pr-4">
-                    <span 
-                      className="text-[#DE9F2E] text-[11px] uppercase tracking-widest mb-1"
-                      style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-                    >
-                      {link.label}
-                    </span>
-                    <span 
-                      className="text-[#F1ECDD] text-[16px] leading-tight"
-                      style={{ fontFamily: "'Work Sans', sans-serif" }}
-                    >
-                      {link.value}
-                    </span>
-                  </div>
-                  <span 
-                    className="text-[#DE9F2E] text-[14px] flex-shrink-0 transform transition-transform duration-300 group-hover:translate-x-1"
-                    aria-hidden="true"
-                  >
-                    →
-                  </span>
+                  {link.label}
                 </a>
               ))}
             </div>
