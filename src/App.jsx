@@ -9,6 +9,7 @@ import WorkWithMe from './sections/WorkWithMe';
 import ExperienceEducation from './sections/ExperienceEducation';
 import Currently from './sections/Currently';
 import WhatIBuild from './sections/WhatIBuild';
+import SelectedWork from './sections/SelectedWork';
 import Contact from './sections/Contact';
 import CursorGlow from './components/CursorGlow';
 import SmoothScroll from './components/SmoothScroll';
@@ -22,6 +23,7 @@ const App = () => {
         <Hero />
         <Currently />
         <WhatIBuild />
+        <SelectedWork />
         <About />
         <Skills />
         <Projects />
