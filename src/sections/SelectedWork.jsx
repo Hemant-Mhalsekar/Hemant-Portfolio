@@ -11,7 +11,7 @@ const PROJECTS = [
     id:   '01',
     name: 'Veyra',
     tags: ['react', 'node.js', 'express', 'mongodb', 'jwt', 'cloudinary'],
-    link: '#',
+    link: 'https://verya-launch.netlify.app/',
     hook: 'Built a bilingual e-commerce platform for a Kuwaiti brand, then hit the wall between local and production.',
     problem:
       "A food brand entering the Kuwaiti market needed to go from nothing to a working e-commerce presence, build brand awareness before launch, then be ready to actually sell product once it dropped. In that market, bilingual (English/Arabic) and mobile-first aren't optional.",
@@ -24,7 +24,7 @@ const PROJECTS = [
     id:   '02',
     name: 'Real-Time AI Surveillance System',
     tags: ['python', 'yolov8', 'bytetrack', 'opencv', 'pytorch', 'scikit-learn', 'flask'],
-    link: '#',
+    link: 'https://real-time-ai-surveillance-system.onrender.com/',
     hook: "Started with a hunch that a hotel's camera system wasn't smart enough. Ended up training my own classifier.",
     problem:
       "I saw a hotel's surveillance setup that only tracked where people were, with no sense of what they were actually doing. Someone loitering somewhere they shouldn't looked identical to normal foot traffic on that system. That gap felt worth building on.",
@@ -37,7 +37,7 @@ const PROJECTS = [
     id:   '03',
     name: 'TaskPilot',
     tags: ['react', 'node.js', 'express', 'mongodb', 'socket.io', 'groq'],
-    link: '#',
+    link: 'https://taskpilot-task-manager.netlify.app/login',
     hook: 'Built a Kanban board that thinks about priority for you, then ran into a hard limit of serverless hosting.',
     problem:
       "Kanban boards are everywhere, but most of them just move cards around. They don't help you figure out what actually matters right now. I wanted to see what a task manager looks like if an LLM does some of that thinking instead of leaving it all on the user.",
@@ -50,7 +50,7 @@ const PROJECTS = [
     id:   '04',
     name: 'CO-PO Mapper',
     tags: ['react', 'zustand', 'sheetjs', 'react-to-print'],
-    link: '#',
+    link: 'https://co-po-pos-mapping.netlify.app/',
     hook: 'Built a tool with no backend on purpose, because for this one, the constraint was the whole point.',
     problem:
       "Engineering colleges have to report Course Outcome and Program Outcome attainment for NBA accreditation, and most departments were doing it by hand in Excel: one spreadsheet per course, formulas prone to breaking, no consistent format, and a lot of faculty time lost every semester.",
@@ -63,7 +63,7 @@ const PROJECTS = [
     id:   '05',
     name: 'Shortify',
     tags: ['java', 'spring boot', 'mysql', 'spring security', 'jwt'],
-    link: '#',
+    link: 'https://shortify-url-shortener-alpha.vercel.app/',
     hook: 'Wanted to actually learn Spring Boot, not just use it for DSA. This is what came out of it.',
     problem:
       "I wanted a project that actually forced me to work in Java and Spring Boot properly, not just as a side language for DSA. A URL shortener is a small enough scope to build fully, but has enough real pieces, auth, rate limiting, redirects at scale, to actually learn from instead of just checking a box.",
@@ -252,6 +252,8 @@ const ProjectBlock = ({ project, index, isExpanded, onToggle }) => {
                 <div>
                   <a
                     href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-[#DE9F2E] tracking-[0.12em] uppercase flex items-center gap-1.5 w-fit hover:opacity-60 transition-opacity duration-200"
                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
                     aria-label={`View ${project.name}`}

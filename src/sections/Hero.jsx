@@ -297,7 +297,7 @@ const Hero = () => {
             >
               {/* Primary: flat mustard fill */}
               <button
-                onClick={() => scrollTo('projects')}
+                onClick={() => scrollTo('work')}
                 className="px-6 py-3 bg-[#DE9F2E] text-[#15180F] text-[13px] font-semibold tracking-wide hover:bg-[#c98c24] active:bg-[#b87c1f] transition-colors duration-200"
                 style={{ fontFamily: "'Work Sans', sans-serif" }}
               >

@@ -7,42 +7,42 @@ const PROJECTS = [
     oneLiner:
       'A full e-commerce platform for a Kuwait-based food brand — started as a bilingual pre-launch landing page, grew into the complete storefront.',
     tags: ['react', 'node.js', 'mongodb'],
-    link: '#',
+    link: 'https://verya-launch.netlify.app/',
   },
   {
     name: 'Real-Time AI Surveillance System',
     oneLiner:
       'Watches live video and flags loitering, running, or intrusion, combining rule-based heuristics with a trained classifier.',
     tags: ['python', 'yolov8', 'flask'],
-    link: '#',
+    link: 'https://real-time-ai-surveillance-system.onrender.com/',
   },
   {
     name: 'TaskPilot',
     oneLiner:
       'A Kanban board that ranks your tasks by urgency and breaks them into subtasks using an LLM.',
     tags: ['mern', 'socket.io', 'groq'],
-    link: '#',
+    link: 'https://taskpilot-task-manager.netlify.app/login',
   },
   {
     name: 'CO-PO Mapper',
     oneLiner:
       'Replaced a manual Excel process for academic outcome reporting — entirely in-browser, zero backend.',
     tags: ['react', 'zustand', 'sheetjs'],
-    link: '#',
+    link: 'https://co-po-pos-mapping.netlify.app/',
   },
   {
     name: 'Shortify',
     oneLiner:
       'A URL shortener with Google sign-in, click tracking, and a rate-limited API, built on Spring Boot.',
     tags: ['java', 'spring boot', 'mysql'],
-    link: '#',
+    link: 'https://shortify-url-shortener-alpha.vercel.app/',
   },
   {
     name: 'Library Management System',
     oneLiner:
       'A console-based library system in Java and MySQL — book issuing, returns, and a fine engine that actually enforces a grace period.',
     tags: ['java', 'mysql', 'jdbc'],
-    link: '#',
+    link: 'https://github.com/Hemant-Mhalsekar/Library-Management-System',
   },
 ];
 
@@ -97,6 +97,8 @@ const ProjectCard = ({ project }) => (
     <div className="mt-5 pt-4 border-t border-[#39471F]/10">
       <a
         href={project.link}
+        target="_blank"
+        rel="noopener noreferrer"
         className="text-[#39471F] tracking-[0.12em] uppercase flex items-center gap-1.5 w-fit"
         style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
         aria-label={`View ${project.name}`}
