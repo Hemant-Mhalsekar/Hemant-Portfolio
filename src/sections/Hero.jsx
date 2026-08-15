@@ -131,12 +131,13 @@ const Hero = () => {
   const metaRef     = useRef(null);
   const terminalRef = useRef(null);
   const scrollCueRef = useRef(null);
+  const statusChipRef = useRef(null);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // All elements with opacity:0 initial style — collect for easy manipulation
-    const animRefs = [eyebrowRef, headlineRef, subheadRef, ctaRef, metaRef, terminalRef, scrollCueRef];
+    const animRefs = [eyebrowRef, headlineRef, subheadRef, ctaRef, metaRef, terminalRef, scrollCueRef, statusChipRef];
 
     if (prefersReduced) {
       // Show everything immediately — no animation
@@ -176,6 +177,11 @@ const Hero = () => {
           { opacity: 0, y: 14 },
           { opacity: 1, y: 0, duration: 0.6 },
           '-=0.5'
+        )
+        .fromTo(statusChipRef.current,
+          { opacity: 0, y: 10, rotate: 0 },
+          { opacity: 1, y: 0, rotate: 3, duration: 0.6 },
+          '-=0.4'
         )
         .fromTo(scrollCueRef.current,
           { opacity: 0 },
@@ -238,9 +244,8 @@ const Hero = () => {
 
         {/* Asymmetric two-column layout:
             left  → text content (flex-1, max-w constrained)
-            right → terminal widget (terminal-positioned CSS class handles
-                    rotation + alignment responsively) */}
-        <div className="flex flex-col lg:flex-row lg:items-start lg:gap-20">
+            right → right column stretches vertically to match left column height, distributing items via justify-between */}
+        <div className="flex flex-col lg:flex-row lg:items-stretch lg:gap-20">
 
           {/* ── Left column: all text content ──────────────────────────────── */}
           <div className="flex-1 max-w-[640px]">
@@ -319,8 +324,8 @@ const Hero = () => {
             </p>
           </div>
 
-          {/* ── Right: Terminal widget & Scroll cue ─────────────────────────── */}
-          <div className="flex flex-col items-center lg:items-end gap-16 lg:gap-20">
+          {/* ── Right: Terminal widget, Status Chip, & Scroll cue ─────────────────────────── */}
+          <div className="flex flex-col items-center lg:items-end gap-16 lg:gap-0 lg:justify-between mt-10 lg:mt-0 lg:pb-4 w-full lg:w-auto">
             {/* .terminal-positioned in index.css applies margins and rotation */}
             <div
               ref={terminalRef}
@@ -328,6 +333,21 @@ const Hero = () => {
               style={{ opacity: 0 }}
             >
               <TerminalWidget />
+            </div>
+
+            {/* Status Chip (Desktop only, mid-column) */}
+            <div 
+              ref={statusChipRef}
+              className="hidden lg:block bg-[#DE9F2E] text-[#39471F] uppercase tracking-wider font-semibold rounded-sm lg:mr-16 xl:mr-24"
+              style={{
+                fontFamily: "'IBM Plex Mono', monospace",
+                fontSize: '12px',
+                padding: '8px 16px',
+                transform: 'rotate(3deg)',
+                opacity: prefersReduced ? 1 : 0,
+              }}
+            >
+              open to work
             </div>
 
             {/* Scroll Cue (Fades in slightly after terminal, but roughly centered relative to terminal) */}
