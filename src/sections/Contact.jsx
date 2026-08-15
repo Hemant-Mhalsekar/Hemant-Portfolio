@@ -230,28 +230,28 @@ const Contact = () => {
                   target={link.label !== 'Email' ? '_blank' : undefined}
                   rel={link.label !== 'Email' ? 'noopener noreferrer' : undefined}
                   download={link.isDownload ? '' : undefined}
-                  className="group flex flex-col py-6 border-b border-[#39471F]/40 hover:bg-[#F1ECDD]/[0.02] transition-colors"
+                  className="group flex flex-row items-center justify-between py-4 border-b border-[#39471F]/40 hover:bg-[#F1ECDD]/[0.02] transition-colors"
                 >
-                  <span 
-                    className="text-[#DE9F2E] text-[11px] uppercase tracking-widest mb-1.5"
-                    style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-                  >
-                    {link.label}
-                  </span>
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-col pr-4">
+                    <span 
+                      className="text-[#DE9F2E] text-[11px] uppercase tracking-widest mb-1"
+                      style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+                    >
+                      {link.label}
+                    </span>
                     <span 
                       className="text-[#F1ECDD] text-[16px] leading-tight"
                       style={{ fontFamily: "'Work Sans', sans-serif" }}
                     >
                       {link.value}
                     </span>
-                    <span 
-                      className="text-[#DE9F2E] text-[14px] transform transition-transform duration-300 group-hover:translate-x-1"
-                      aria-hidden="true"
-                    >
-                      →
-                    </span>
                   </div>
+                  <span 
+                    className="text-[#DE9F2E] text-[14px] flex-shrink-0 transform transition-transform duration-300 group-hover:translate-x-1"
+                    aria-hidden="true"
+                  >
+                    →
+                  </span>
                 </a>
               ))}
             </div>
