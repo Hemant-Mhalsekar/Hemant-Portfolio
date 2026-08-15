@@ -12,6 +12,7 @@ import WhatIBuild from './sections/WhatIBuild';
 import SelectedWork from './sections/SelectedWork';
 import HowIBuild from './sections/HowIBuild';
 import Toolbox from './sections/Toolbox';
+import Experience from './sections/Experience';
 import Contact from './sections/Contact';
 import CursorGlow from './components/CursorGlow';
 import SmoothScroll from './components/SmoothScroll';
@@ -28,6 +29,7 @@ const App = () => {
         <SelectedWork />
         <HowIBuild />
         <Toolbox />
+        <Experience />
         <About />
         <Skills />
         <Projects />
