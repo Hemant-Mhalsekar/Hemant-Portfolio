@@ -31,10 +31,6 @@ const App = () => {
         <Toolbox />
         <Experience />
         <About />
-        <Skills />
-        <Projects />
-        <WorkWithMe />
-        <ExperienceEducation />
         <Contact />
       </main>
       <Footer />
