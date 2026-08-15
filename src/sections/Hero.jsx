@@ -76,7 +76,7 @@ const TerminalWidget = () => {
         <span className="w-[10px] h-[10px] rounded-full bg-[#3A3D2F]" />
         <span className="w-[10px] h-[10px] rounded-full bg-[#3A3D2F]" />
         <span
-          className="ml-2 text-[10px] tracking-[0.2em] uppercase text-[#3A3D2F]"
+          className="ml-2 text-[10px] tracking-[0.2em] uppercase text-[#CBD3B8]/70"
         >
           bash
         </span>
@@ -224,11 +224,11 @@ const Hero = () => {
       className="relative min-h-screen bg-[#F1ECDD] overflow-hidden flex flex-col justify-center pt-14"
     >
       <style>{`
-        @keyframes scrollDot {
-          0% { transform: translate(-50%, -10px); opacity: 0; }
-          15% { opacity: 1; }
-          85% { opacity: 1; }
-          100% { transform: translate(-50%, 60px); opacity: 0; }
+        @keyframes scrollDotDrop {
+          0% { transform: translateY(-8px); opacity: 0; }
+          15% { transform: translateY(0); opacity: 1; }
+          80% { transform: translateY(60px); opacity: 1; }
+          100% { transform: translateY(75px); opacity: 0; }
         }
       `}</style>
 
@@ -290,22 +290,25 @@ const Hero = () => {
               I build full stack products, and lately I've been giving them a brain when it actually helps.
             </h1>
 
-            {/* Subhead — Work Sans, relaxed, constrained to ~38ch */}
-            <p
-              ref={subheadRef}
-              className="text-[17px] sm:text-[18px] text-[#3A3D2F] leading-[1.72] mb-10"
-              style={{
-                fontFamily: "'Work Sans', sans-serif",
-                maxWidth: '38ch',
-                opacity: 0,
-              }}
-            >
-              Working mainly in React, Node and MongoDB. I've been folding AI into
-              what I build where it's actually useful — an LLM that helps prioritize
-              tasks, a model that reads a resume and tells you what's missing — not AI
-              for the sake of a buzzword. Java and Spring Boot run alongside as a
-              second track.
-            </p>
+            {/* Subhead & Footnote */}
+            <div ref={subheadRef} className="mb-10" style={{ opacity: 0 }}>
+              <p
+                className="text-[17px] sm:text-[18px] text-[#3A3D2F] leading-[1.72]"
+                style={{ fontFamily: "'Work Sans', sans-serif", maxWidth: '38ch' }}
+              >
+                Working mainly in React, Node and MongoDB. I've been folding AI into
+                what I build where it's actually useful — an LLM that helps prioritize
+                tasks, a model that reads a resume and tells you what's missing — not AI
+                for the sake of a buzzword. Java and Spring Boot run alongside as a
+                second track.
+              </p>
+              <p
+                className="text-[#3A3D2F] opacity-60 mt-4"
+                style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '12px' }}
+              >
+                PS. those are human em dashes. I just like them a little too much.
+              </p>
+            </div>
 
             {/* CTA Buttons — flat, no rounded corners, no shadows, no gradients */}
             <div
@@ -343,7 +346,7 @@ const Hero = () => {
           </div>
 
           {/* ── Right: Terminal widget, Status Chip, & Scroll cue ─────────────────────────── */}
-          <div className="flex flex-col items-center lg:items-end gap-16 lg:gap-0 lg:justify-between mt-10 lg:mt-0 lg:pb-4 w-full lg:w-auto">
+          <div className="flex flex-col items-center lg:items-end gap-16 lg:gap-0 lg:justify-between mt-10 lg:mt-0 lg:pb-4 w-full lg:w-auto h-full lg:min-h-[530px]">
             {/* .terminal-positioned in index.css applies margins and rotation */}
             <div
               ref={terminalRef}
@@ -357,9 +360,7 @@ const Hero = () => {
             <div 
               ref={statusChipRef}
               className="hidden lg:block lg:mr-16 xl:mr-24"
-              style={{
-                opacity: prefersReduced ? 1 : 0,
-              }}
+              style={{ opacity: prefersReduced ? 1 : 0 }}
             >
               <div
                 className={`bg-[#DE9F2E] text-[#39471F] uppercase tracking-wider font-semibold rounded-sm ${prefersReduced ? 'rotate-[3deg]' : 'idle-drift'}`}
@@ -373,27 +374,31 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Scroll Cue (Fades in slightly after terminal, but roughly centered relative to terminal) */}
+            {/* Scroll Cue (Fades in slightly after terminal, placed at bottom) */}
             <div 
               ref={scrollCueRef}
-              className="flex flex-col items-center gap-3 lg:mr-32"
+              className="flex flex-col items-center mt-12 lg:mt-5 lg:mr-32"
               style={{ opacity: 0 }}
             >
-              <div className="relative w-px h-[55px] bg-[#39471F]/40">
+              <div className="relative flex justify-center w-[8px] h-[75px]">
+                {/* The track line */}
+                <div className="absolute top-0 w-[1.5px] h-full bg-[#39471F]/40 rounded-full" />
+                
+                {/* The traveling dot */}
                 {!prefersReduced ? (
                   <div 
-                    className="absolute top-0 left-1/2 -translate-x-1/2 w-[6px] h-[6px] rounded-full bg-[#DE9F2E]"
-                    style={{ animation: 'scrollDot 1.8s ease-in-out infinite' }} 
+                    className="absolute top-0 w-[8px] h-[8px] bg-[#DE9F2E] rounded-full z-10"
+                    style={{ animation: 'scrollDotDrop 2s ease-in-out infinite' }}
                   />
                 ) : (
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[6px] h-[6px] rounded-full bg-[#DE9F2E]" />
+                  <div className="absolute top-0 w-[8px] h-[8px] bg-[#DE9F2E] rounded-full z-10" />
                 )}
               </div>
               <span 
-                className="text-[11px] text-[#3A3D2F] uppercase tracking-widest" 
+                className="text-[12px] text-[#3A3D2F] mt-3" 
                 style={{ fontFamily: "'IBM Plex Mono', monospace" }}
               >
-                scroll
+                scroll — the plot thickens
               </span>
             </div>
           </div>
