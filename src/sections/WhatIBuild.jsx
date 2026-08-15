@@ -195,7 +195,7 @@ const WhatIBuild = () => {
 
   return (
     <section
-      id="what-i-build"
+      id="work"
       ref={sectionRef}
       className="bg-[#F1ECDD] border-t border-[#3A3D2F]/10"
     >

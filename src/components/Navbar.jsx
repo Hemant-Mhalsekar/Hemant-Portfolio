@@ -4,10 +4,10 @@ import gsap from 'gsap';
 // ── Navigation links ───────────────────────────────────────────────────────────
 // sectionId = the DOM id to observe / scroll to
 const NAV_LINKS = [
-  { label: 'Home',    href: '#hero',     sectionId: 'hero'     },
-  { label: 'Work',    href: '#projects', sectionId: 'projects' },
-  { label: 'About',   href: '#about',    sectionId: 'about'    },
-  { label: 'Contact', href: '#contact',  sectionId: 'contact'  },
+  { label: 'Home',    href: '#hero',         sectionId: 'hero'         },
+  { label: 'Work',    href: '#work',         sectionId: 'work'         },
+  { label: 'Process', href: '#how-i-build',  sectionId: 'how-i-build'  },
+  { label: 'Contact', href: '#contact',      sectionId: 'contact'      },
 ];
 
 const Navbar = () => {
