@@ -10,6 +10,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const SEQUENCE = [
   { text: '$ whoami',                  type: 'cmd', pause: 380 },
   { text: '> hemant mhalsekar',        type: 'out', pause: 560 },
+  { text: '$ stack',                   type: 'cmd', pause: 380 },
+  { text: '> react, node, mongodb, java', type: 'out', pause: 560 },
   { text: '$ status',                  type: 'cmd', pause: 380 },
   { text: '> open to full-time roles', type: 'out', pause: 0   },
 ];
@@ -65,29 +67,29 @@ const TerminalWidget = () => {
   return (
     <div
       aria-hidden="true"
-      className="bg-[#15180F] w-[280px] sm:w-[300px] select-none flex-shrink-0"
+      className="bg-[#15180F] w-[320px] sm:w-[360px] select-none flex-shrink-0"
       style={{ fontFamily: "'IBM Plex Mono', monospace" }}
     >
       {/* Window chrome */}
-      <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-[#3A3D2F]/60">
-        <span className="w-[9px] h-[9px] rounded-full bg-[#3A3D2F]" />
-        <span className="w-[9px] h-[9px] rounded-full bg-[#3A3D2F]" />
-        <span className="w-[9px] h-[9px] rounded-full bg-[#3A3D2F]" />
+      <div className="flex items-center gap-1.5 px-6 py-3 border-b border-[#3A3D2F]/60">
+        <span className="w-[10px] h-[10px] rounded-full bg-[#3A3D2F]" />
+        <span className="w-[10px] h-[10px] rounded-full bg-[#3A3D2F]" />
+        <span className="w-[10px] h-[10px] rounded-full bg-[#3A3D2F]" />
         <span
-          className="ml-2 text-[9px] tracking-[0.2em] uppercase text-[#3A3D2F]"
+          className="ml-2 text-[10px] tracking-[0.2em] uppercase text-[#3A3D2F]"
         >
           bash
         </span>
       </div>
 
       {/* Terminal body */}
-      <div className="px-4 py-4 space-y-px min-h-[108px]">
+      <div className="px-7 py-7 space-y-1 min-h-[200px]">
 
         {/* Completed lines */}
         {lines.map((l, i) => (
           <div
             key={i}
-            className={`text-[12.5px] leading-[1.9] ${
+            className={`text-[15px] leading-[1.8] ${
               l.type === 'cmd' ? 'text-[#DE9F2E]' : 'text-[#CBD3B8]'
             }`}
           >
@@ -98,7 +100,7 @@ const TerminalWidget = () => {
         {/* Currently-typing line (shown while not done) */}
         {!done && (
           <div
-            className={`text-[12.5px] leading-[1.9] ${
+            className={`text-[15px] leading-[1.8] ${
               currentType === 'cmd' ? 'text-[#DE9F2E]' : 'text-[#CBD3B8]'
             }`}
           >
@@ -110,7 +112,7 @@ const TerminalWidget = () => {
 
         {/* Final blinking cursor after all lines are complete */}
         {done && (
-          <div className="text-[12.5px] leading-[1.9] text-[#CBD3B8]">
+          <div className="text-[15px] leading-[1.8] text-[#CBD3B8]">
             <span className="terminal-cursor inline-block w-[0.5em] h-[0.88em] align-middle bg-current" />
           </div>
         )}
@@ -121,18 +123,20 @@ const TerminalWidget = () => {
 
 // ── Hero Section ───────────────────────────────────────────────────────────────
 const Hero = () => {
+  const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const eyebrowRef  = useRef(null);
   const headlineRef = useRef(null);
   const subheadRef  = useRef(null);
   const ctaRef      = useRef(null);
   const metaRef     = useRef(null);
   const terminalRef = useRef(null);
+  const scrollCueRef = useRef(null);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // All elements with opacity:0 initial style — collect for easy manipulation
-    const animRefs = [eyebrowRef, headlineRef, subheadRef, ctaRef, metaRef, terminalRef];
+    const animRefs = [eyebrowRef, headlineRef, subheadRef, ctaRef, metaRef, terminalRef, scrollCueRef];
 
     if (prefersReduced) {
       // Show everything immediately — no animation
@@ -172,6 +176,11 @@ const Hero = () => {
           { opacity: 0, y: 14 },
           { opacity: 1, y: 0, duration: 0.6 },
           '-=0.5'
+        )
+        .fromTo(scrollCueRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.8, delay: 1.5 },
+          '-=0.6'
         );
     });
 
@@ -194,6 +203,14 @@ const Hero = () => {
       id="hero"
       className="relative min-h-screen bg-[#F1ECDD] overflow-hidden flex flex-col justify-center pt-14"
     >
+      <style>{`
+        @keyframes scrollDot {
+          0% { transform: translate(-50%, -10px); opacity: 0; }
+          15% { opacity: 1; }
+          85% { opacity: 1; }
+          100% { transform: translate(-50%, 60px); opacity: 0; }
+        }
+      `}</style>
 
       {/* ── Ghost background word ──────────────────────────────────────────── */}
       {/* Large, low-opacity "DEVELOPER" anchored to bottom-left. overflow-hidden
@@ -302,17 +319,42 @@ const Hero = () => {
             </p>
           </div>
 
-          {/* ── Right: Terminal widget ──────────────────────────────────────── */}
-          {/* .terminal-positioned in index.css:
-              mobile  → margin-top: 2.5rem, no rotation
-              desktop → margin-top: 2rem, align-self: flex-start, rotate(-2deg) */}
-          <div
-            ref={terminalRef}
-            className="terminal-positioned"
-            style={{ opacity: 0 }}
-          >
-            <TerminalWidget />
+          {/* ── Right: Terminal widget & Scroll cue ─────────────────────────── */}
+          <div className="flex flex-col items-center lg:items-end gap-16 lg:gap-20">
+            {/* .terminal-positioned in index.css applies margins and rotation */}
+            <div
+              ref={terminalRef}
+              className="terminal-positioned"
+              style={{ opacity: 0 }}
+            >
+              <TerminalWidget />
+            </div>
+
+            {/* Scroll Cue (Fades in slightly after terminal, but roughly centered relative to terminal) */}
+            <div 
+              ref={scrollCueRef}
+              className="flex flex-col items-center gap-3 lg:mr-32"
+              style={{ opacity: 0 }}
+            >
+              <div className="relative w-px h-[55px] bg-[#39471F]/40">
+                {!prefersReduced ? (
+                  <div 
+                    className="absolute top-0 left-1/2 -translate-x-1/2 w-[6px] h-[6px] rounded-full bg-[#DE9F2E]"
+                    style={{ animation: 'scrollDot 1.8s ease-in-out infinite' }} 
+                  />
+                ) : (
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[6px] h-[6px] rounded-full bg-[#DE9F2E]" />
+                )}
+              </div>
+              <span 
+                className="text-[11px] text-[#3A3D2F] uppercase tracking-widest" 
+                style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+              >
+                scroll
+              </span>
+            </div>
           </div>
+
         </div>
       </div>
     </section>
