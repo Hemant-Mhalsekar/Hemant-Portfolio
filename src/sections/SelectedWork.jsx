@@ -5,13 +5,14 @@ const PREFERS_REDUCED =
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ── Project data ───────────────────────────────────────────────────────────────
-// Copy is used verbatim as written — do not paraphrase or shorten.
+// problem / built / learned copy is verbatim — do not paraphrase or shorten.
 const PROJECTS = [
   {
     id:   '01',
     name: 'Veyra',
     tags: ['react', 'node.js', 'express', 'mongodb', 'jwt', 'cloudinary'],
     link: '#',
+    hook: 'Built a bilingual e-commerce platform for a Kuwaiti brand, then hit the wall between local and production.',
     problem:
       "A food brand entering the Kuwaiti market needed to go from nothing to a working e-commerce presence, build brand awareness before launch, then be ready to actually sell product once it dropped. In that market, bilingual (English/Arabic) and mobile-first aren't optional.",
     built:
@@ -24,6 +25,7 @@ const PROJECTS = [
     name: 'Real-Time AI Surveillance System',
     tags: ['python', 'yolov8', 'bytetrack', 'opencv', 'pytorch', 'scikit-learn', 'flask'],
     link: '#',
+    hook: "Started with a hunch that a hotel's camera system wasn't smart enough. Ended up training my own classifier.",
     problem:
       "I saw a hotel's surveillance setup that only tracked where people were, with no sense of what they were actually doing. Someone loitering somewhere they shouldn't looked identical to normal foot traffic on that system. That gap felt worth building on.",
     built:
@@ -36,6 +38,7 @@ const PROJECTS = [
     name: 'TaskPilot',
     tags: ['react', 'node.js', 'express', 'mongodb', 'socket.io', 'groq'],
     link: '#',
+    hook: 'Built a Kanban board that thinks about priority for you, then ran into a hard limit of serverless hosting.',
     problem:
       "Kanban boards are everywhere, but most of them just move cards around. They don't help you figure out what actually matters right now. I wanted to see what a task manager looks like if an LLM does some of that thinking instead of leaving it all on the user.",
     built:
@@ -48,6 +51,7 @@ const PROJECTS = [
     name: 'CO-PO Mapper',
     tags: ['react', 'zustand', 'sheetjs', 'react-to-print'],
     link: '#',
+    hook: 'Built a tool with no backend on purpose, because for this one, the constraint was the whole point.',
     problem:
       "Engineering colleges have to report Course Outcome and Program Outcome attainment for NBA accreditation, and most departments were doing it by hand in Excel: one spreadsheet per course, formulas prone to breaking, no consistent format, and a lot of faculty time lost every semester.",
     built:
@@ -60,6 +64,7 @@ const PROJECTS = [
     name: 'Shortify',
     tags: ['java', 'spring boot', 'mysql', 'spring security', 'jwt'],
     link: '#',
+    hook: 'Wanted to actually learn Spring Boot, not just use it for DSA. This is what came out of it.',
     problem:
       "I wanted a project that actually forced me to work in Java and Spring Boot properly, not just as a side language for DSA. A URL shortener is a small enough scope to build fully, but has enough real pieces, auth, rate limiting, redirects at scale, to actually learn from instead of just checking a box.",
     built:
@@ -70,15 +75,17 @@ const PROJECTS = [
 ];
 
 const STORY = [
-  { label: 'The problem', key: 'problem' },
+  { label: 'The problem',  key: 'problem' },
   { label: 'What I built', key: 'built'   },
   { label: 'What I learned', key: 'learned' },
 ];
 
 // ── ProjectBlock ───────────────────────────────────────────────────────────────
-// Self-contained: manages its own IntersectionObserver + visibility state.
-// Each even-indexed block gets a subtle olive-tinted full-width background strip.
-const ProjectBlock = ({ project, index }) => {
+// Manages its own scroll-entrance visibility (IntersectionObserver).
+// Receives isExpanded + onToggle from the parent for accordion coordination.
+// Height animation uses grid-template-rows: 0fr → 1fr trick so the transition
+// works smoothly without a hardcoded max-height guess.
+const ProjectBlock = ({ project, index, isExpanded, onToggle }) => {
   const blockRef = useRef(null);
   const [visible, setVisible] = useState(PREFERS_REDUCED);
 
@@ -91,7 +98,7 @@ const ProjectBlock = ({ project, index }) => {
         setVisible(true);
         observer.disconnect();
       },
-      { threshold: 0.07 }
+      { threshold: 0.06 }
     );
 
     observer.observe(blockRef.current);
@@ -101,108 +108,160 @@ const ProjectBlock = ({ project, index }) => {
   const isEven = index % 2 === 0;
 
   return (
-    // Full-width strip — alternating background applied here so it bleeds edge-to-edge
+    // Full-width strip — background bleeds edge-to-edge; subtle divider between blocks
     <div
       ref={blockRef}
       style={{
         backgroundColor: isEven ? 'rgba(57,71,31,0.18)' : 'transparent',
-        opacity:   visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(28px)',
+        borderTop:  '1px solid rgba(203,211,184,0.07)',
+        opacity:    visible ? 1 : 0,
+        transform:  visible ? 'translateY(0)' : 'translateY(24px)',
         transition: PREFERS_REDUCED
           ? 'none'
           : 'opacity 500ms ease, transform 500ms ease',
       }}
     >
-      <div className="container-max px-6 sm:px-10 lg:px-16 py-14 sm:py-16 lg:py-20">
+      <div className="container-max px-6 sm:px-10 lg:px-16">
 
-        {/* ── Name row: index (left) + name + tags (right) ───────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[140px_1fr] gap-x-8 gap-y-3 mb-10 sm:mb-12">
+        {/* ── Clickable header — whole row toggles accordion ──────────── */}
+        {/* <button> wraps collapsed content only (NOT the expanded story).
+            The view-project <a> inside the expanded area is a sibling div,
+            so there's no nested interactive-element conflict. */}
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-expanded={isExpanded}
+          aria-controls={`story-${project.id}`}
+          className="w-full text-left py-10 sm:py-12 group"
+          style={{ cursor: 'pointer', background: 'none', border: 'none', padding: '2.5rem 0' }}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-[140px_1fr] gap-x-8 gap-y-3">
 
-          {/* Index label — quiet, not bold */}
-          <div className="lg:pt-[0.55rem]">
-            <span
-              className="text-[#DE9F2E] tracking-[0.22em]"
-              style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
-            >
-              {project.id}
-            </span>
-          </div>
-
-          {/* Project name + tags */}
-          <div>
-            <h3
-              className="text-[#CBD3B8] tracking-tight leading-[0.95]"
-              style={{
-                fontFamily: "'Bricolage Grotesque', sans-serif",
-                fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
-                fontWeight: 800,
-              }}
-            >
-              {project.name}
-            </h3>
-
-            <div className="flex flex-wrap gap-2 mt-4">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="border border-[#DE9F2E] text-[#DE9F2E] px-2.5 py-[4px] rounded-[4px]"
-                  style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10.5px', lineHeight: 1 }}
-                >
-                  {tag}
-                </span>
-              ))}
+            {/* Index label */}
+            <div className="lg:pt-[0.55rem]">
+              <span
+                className="text-[#DE9F2E] tracking-[0.22em]"
+                style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
+              >
+                {project.id}
+              </span>
             </div>
-          </div>
-        </div>
 
-        {/* ── Three-part story ──────────────────────────────────────────── */}
-        {/* Each label+content pair is its own 2-col grid so gap-y can be
-            tighter within a pair and looser between pairs via the flex gap */}
-        <div className="flex flex-col gap-8 sm:gap-10">
-          {STORY.map(({ label, key }) => (
-            <div
-              key={key}
-              className="grid grid-cols-1 lg:grid-cols-[140px_1fr] gap-x-8 gap-y-2"
-            >
-              {/* Mono label */}
-              <div className="lg:pt-[3px]">
-                <span
-                  className="text-[#DE9F2E] tracking-[0.18em] uppercase"
-                  style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
-                >
-                  {label}
-                </span>
-              </div>
-
-              {/* Body copy */}
-              <p
-                className="text-[#CBD3B8]"
+            {/* Name — tags — hook — toggle */}
+            <div>
+              {/* Project name */}
+              <h3
+                className="text-[#CBD3B8] tracking-tight leading-[0.95]"
                 style={{
-                  fontFamily: "'Work Sans', sans-serif",
-                  fontSize: '16.5px',
-                  lineHeight: 1.72,
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontSize:   'clamp(2.5rem, 5vw, 3.5rem)',
+                  fontWeight: 800,
                 }}
               >
-                {project[key]}
-              </p>
-            </div>
-          ))}
-        </div>
+                {project.name}
+              </h3>
 
-        {/* ── View project link ─────────────────────────────────────────── */}
-        {/* Empty first cell keeps the link aligned with the content column on desktop */}
-        <div className="mt-10 grid grid-cols-1 lg:grid-cols-[140px_1fr] gap-x-8">
-          <div className="hidden lg:block" aria-hidden="true" />
-          <div>
-            <a
-              href={project.link}
-              className="text-[#DE9F2E] tracking-[0.12em] uppercase flex items-center gap-1.5 w-fit hover:opacity-60 transition-opacity duration-200"
-              style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
-              aria-label={`View ${project.name}`}
-            >
-              View project
-              <span aria-hidden="true">→</span>
-            </a>
+              {/* Tech tags */}
+              <div className="flex flex-wrap gap-2 mt-4">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="border border-[#DE9F2E] text-[#DE9F2E] px-2.5 py-[4px] rounded-[4px]"
+                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10.5px', lineHeight: 1 }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* One-line hook */}
+              <p
+                className="text-[#CBD3B8] mt-4 max-w-[62ch]"
+                style={{ fontFamily: "'Work Sans', sans-serif", fontSize: '16px', lineHeight: 1.6 }}
+              >
+                {project.hook}
+              </p>
+
+              {/* Expand / collapse control */}
+              <div className="mt-4">
+                <span
+                  className="text-[#DE9F2E] tracking-[0.14em] uppercase"
+                  style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
+                >
+                  {isExpanded ? '− Close' : '+ Read the story'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </button>
+
+        {/* ── Animated expanded content ─────────────────────────────────── */}
+        {/* grid-template-rows: 0fr → 1fr is the smoothest height-transition
+            technique: no max-height guessing, no abrupt snapping.
+            Inner div needs overflow:hidden + min-height:0 to collapse. */}
+        <div
+          id={`story-${project.id}`}
+          role="region"
+          aria-labelledby={`header-${project.id}`}
+          style={{
+            display:          'grid',
+            gridTemplateRows: isExpanded ? '1fr' : '0fr',
+            transition:       PREFERS_REDUCED ? 'none' : 'grid-template-rows 450ms ease',
+          }}
+        >
+          <div style={{ overflow: 'hidden', minHeight: 0 }}>
+
+            {/* Story content — shown only when expanded */}
+            <div className="pb-12 sm:pb-14 lg:pb-16">
+
+              {/* Three-part story: each pair is its own 2-col grid */}
+              <div className="flex flex-col gap-8 sm:gap-10">
+                {STORY.map(({ label, key }) => (
+                  <div
+                    key={key}
+                    className="grid grid-cols-1 lg:grid-cols-[140px_1fr] gap-x-8 gap-y-2"
+                  >
+                    {/* Mono label */}
+                    <div className="lg:pt-[3px]">
+                      <span
+                        className="text-[#DE9F2E] tracking-[0.18em] uppercase"
+                        style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
+                      >
+                        {label}
+                      </span>
+                    </div>
+
+                    {/* Body copy */}
+                    <p
+                      className="text-[#CBD3B8]"
+                      style={{
+                        fontFamily: "'Work Sans', sans-serif",
+                        fontSize:   '16.5px',
+                        lineHeight: 1.72,
+                      }}
+                    >
+                      {project[key]}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* View project link — empty first cell aligns with content column */}
+              <div className="mt-10 grid grid-cols-1 lg:grid-cols-[140px_1fr] gap-x-8">
+                <div className="hidden lg:block" aria-hidden="true" />
+                <div>
+                  <a
+                    href={project.link}
+                    className="text-[#DE9F2E] tracking-[0.12em] uppercase flex items-center gap-1.5 w-fit hover:opacity-60 transition-opacity duration-200"
+                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
+                    aria-label={`View ${project.name}`}
+                  >
+                    View project
+                    <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -212,11 +271,19 @@ const ProjectBlock = ({ project, index }) => {
 
 // ── SelectedWork Section ───────────────────────────────────────────────────────
 const SelectedWork = () => {
-  const sectionRef    = useRef(null);
+  const sectionRef = useRef(null);
   const [headerVisible, setHeaderVisible] = useState(PREFERS_REDUCED);
 
-  // Section-level observer drives the header entrance animation only.
-  // Each ProjectBlock manages its own observer for its own reveal.
+  // expandedId — which project's story is currently open (null = all closed)
+  // Accordion: opening one automatically closes the previously open one.
+  const [expandedId, setExpandedId] = useState(null);
+
+  const handleToggle = (id) => {
+    setExpandedId((prev) => (prev === id ? null : id));
+  };
+
+  // Section-level observer — drives the section header entrance only.
+  // Each ProjectBlock manages its own observer independently.
   useEffect(() => {
     if (PREFERS_REDUCED || !sectionRef.current) return;
 
@@ -234,8 +301,8 @@ const SelectedWork = () => {
   }, []);
 
   const fadeUp = (delay, duration = 550, ty = 20) => ({
-    opacity:   headerVisible ? 1 : 0,
-    transform: headerVisible ? 'translateY(0)' : `translateY(${ty}px)`,
+    opacity:    headerVisible ? 1 : 0,
+    transform:  headerVisible ? 'translateY(0)' : `translateY(${ty}px)`,
     transition: PREFERS_REDUCED
       ? 'none'
       : `opacity ${duration}ms ease ${delay}ms, transform ${duration}ms ease ${delay}ms`,
@@ -248,17 +315,14 @@ const SelectedWork = () => {
       className="bg-[#15180F]"
     >
       {/* ── Section header ─────────────────────────────────────────────── */}
-      <div className="container-max px-6 sm:px-10 lg:px-16 pt-16 sm:pt-20 lg:pt-24 pb-10 sm:pb-12">
+      <div className="container-max px-6 sm:px-10 lg:px-16 pt-16 sm:pt-20 lg:pt-24 pb-2">
 
-        {/* Eyebrow — mustard vertical rule + mono label */}
+        {/* Eyebrow */}
         <div
           className="flex items-center gap-3 mb-5"
           style={fadeUp(0, 500, 16)}
         >
-          <span
-            aria-hidden="true"
-            className="flex-shrink-0 w-px h-[18px] bg-[#DE9F2E]/45"
-          />
+          <span aria-hidden="true" className="flex-shrink-0 w-px h-[18px] bg-[#DE9F2E]/45" />
           <p
             className="text-[11px] text-[#DE9F2E] tracking-[0.22em] uppercase"
             style={{ fontFamily: "'IBM Plex Mono', monospace" }}
@@ -272,7 +336,7 @@ const SelectedWork = () => {
           className="font-black leading-[1.0] tracking-tight text-[#CBD3B8]"
           style={{
             fontFamily: "'Bricolage Grotesque', sans-serif",
-            fontSize: 'clamp(2rem, 3.5vw, 2.5rem)',
+            fontSize:   'clamp(2rem, 3.5vw, 2.5rem)',
             ...fadeUp(110, 550, 20),
           }}
         >
@@ -282,8 +346,17 @@ const SelectedWork = () => {
 
       {/* ── Project blocks ─────────────────────────────────────────────── */}
       {PROJECTS.map((project, i) => (
-        <ProjectBlock key={project.id} project={project} index={i} />
+        <ProjectBlock
+          key={project.id}
+          project={project}
+          index={i}
+          isExpanded={expandedId === project.id}
+          onToggle={() => handleToggle(project.id)}
+        />
       ))}
+
+      {/* Bottom breathing room */}
+      <div className="pb-8 sm:pb-12" />
     </section>
   );
 };
