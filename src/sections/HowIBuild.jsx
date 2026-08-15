@@ -166,7 +166,7 @@ const HowIBuild = () => {
       zIndex:          10,
       border:          `2px solid ${isFilled ? '#DE9F2E' : 'rgba(57,71,31,0.4)'}`,
       backgroundColor: isFilled ? '#DE9F2E' : 'transparent',
-      transition:      PREFERS_REDUCED ? 'none' : 'background-color 150ms ease, border-color 150ms ease',
+      transition:      PREFERS_REDUCED ? 'none' : 'background-color 200ms ease, border-color 200ms ease',
       // Pulse animation fires once on fill; active scale takes over after
       animation:       isPulsing && !PREFERS_REDUCED ? 'hib-pulse 200ms ease-out' : 'none',
       transform:       !isPulsing && isActive ? 'scale(1.28)' : 'scale(1)',
@@ -178,14 +178,14 @@ const HowIBuild = () => {
           key={stage.name}
           type="button"
           onClick={() => handleNodeClick(i)}
-          className="flex flex-col items-center gap-2"
+          className="flex flex-col items-center gap-2 group"
           style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
           aria-label={`Stage: ${stage.name}`}
           aria-pressed={isActive}
         >
-          <div style={circleStyle} />
+          <div className="group-hover:bg-[#DE9F2E]/50 group-hover:border-[#DE9F2E]" style={circleStyle} />
           <span
-            className="text-[#39471F]"
+            className="text-[#39471F] group-hover:font-semibold transition-all duration-200"
             style={{
               fontFamily:  "'IBM Plex Mono', monospace",
               fontSize:    '12px',
@@ -201,19 +201,19 @@ const HowIBuild = () => {
     }
 
     // Vertical (mobile): circle left, label right
-    return (
+      return (
       <button
         key={stage.name}
         type="button"
         onClick={() => handleNodeClick(i)}
-        className="flex flex-row items-center gap-4 text-left"
+        className="flex flex-row items-center gap-4 text-left group"
         style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
         aria-label={`Stage: ${stage.name}`}
         aria-pressed={isActive}
       >
-        <div style={circleStyle} />
+        <div className="group-hover:bg-[#DE9F2E]/50 group-hover:border-[#DE9F2E]" style={circleStyle} />
         <span
-          className="text-[#39471F]"
+          className="text-[#39471F] group-hover:font-semibold transition-all duration-200"
           style={{
             fontFamily: "'IBM Plex Mono', monospace",
             fontSize:   '13px',
@@ -395,7 +395,8 @@ const HowIBuild = () => {
             style={{
               minHeight:  '3.5em',
               opacity:    isChanging ? 0 : 1,
-              transition: PREFERS_REDUCED ? 'none' : 'opacity 180ms ease',
+              transform:  isChanging ? 'translateY(8px)' : 'translateY(0)',
+              transition: PREFERS_REDUCED ? 'none' : 'opacity 200ms ease, transform 200ms ease',
             }}
           >
             {activeNode === null ? (

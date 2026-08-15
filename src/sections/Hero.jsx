@@ -124,6 +124,8 @@ const TerminalWidget = () => {
 // ── Hero Section ───────────────────────────────────────────────────────────────
 const Hero = () => {
   const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const [scrollY, setScrollY] = useState(0);
+
   const eyebrowRef  = useRef(null);
   const headlineRef = useRef(null);
   const subheadRef  = useRef(null);
@@ -139,11 +141,20 @@ const Hero = () => {
     // All elements with opacity:0 initial style — collect for easy manipulation
     const animRefs = [eyebrowRef, headlineRef, subheadRef, ctaRef, metaRef, terminalRef, scrollCueRef, statusChipRef];
 
+    const handleScroll = () => {
+      // Limit parallax updates to when the hero is somewhat in view
+      if (window.scrollY < window.innerHeight * 1.5) {
+        setScrollY(window.scrollY);
+      }
+    };
+
     if (prefersReduced) {
       // Show everything immediately — no animation
       animRefs.forEach((r) => { if (r.current) r.current.style.opacity = '1'; });
       return;
     }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
@@ -179,8 +190,8 @@ const Hero = () => {
           '-=0.5'
         )
         .fromTo(statusChipRef.current,
-          { opacity: 0, y: 10, rotate: 0 },
-          { opacity: 1, y: 0, rotate: 3, duration: 0.6 },
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.6 },
           '-=0.4'
         )
         .fromTo(scrollCueRef.current,
@@ -190,7 +201,10 @@ const Hero = () => {
         );
     });
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   // ── Smooth scroll utility ──────────────────────────────────────────────────
@@ -224,7 +238,11 @@ const Hero = () => {
       <div
         aria-hidden="true"
         className="absolute bottom-0 left-0 pointer-events-none select-none"
-        style={{ lineHeight: 0.85 }}
+        style={{ 
+          lineHeight: 0.85,
+          transform: prefersReduced ? 'none' : `translateY(${scrollY * 0.4}px)`,
+          transition: prefersReduced ? 'none' : 'transform 0.1s ease-out'
+        }}
       >
         <span
           className="block font-black text-[#15180F] whitespace-nowrap tracking-tight"
@@ -338,16 +356,21 @@ const Hero = () => {
             {/* Status Chip (Desktop only, mid-column) */}
             <div 
               ref={statusChipRef}
-              className="hidden lg:block bg-[#DE9F2E] text-[#39471F] uppercase tracking-wider font-semibold rounded-sm lg:mr-16 xl:mr-24"
+              className="hidden lg:block lg:mr-16 xl:mr-24"
               style={{
-                fontFamily: "'IBM Plex Mono', monospace",
-                fontSize: '12px',
-                padding: '8px 16px',
-                transform: 'rotate(3deg)',
                 opacity: prefersReduced ? 1 : 0,
               }}
             >
-              open to work
+              <div
+                className={`bg-[#DE9F2E] text-[#39471F] uppercase tracking-wider font-semibold rounded-sm ${prefersReduced ? 'rotate-[3deg]' : 'idle-drift'}`}
+                style={{
+                  fontFamily: "'IBM Plex Mono', monospace",
+                  fontSize: '12px',
+                  padding: '8px 16px',
+                }}
+              >
+                open to work
+              </div>
             </div>
 
             {/* Scroll Cue (Fades in slightly after terminal, but roughly centered relative to terminal) */}

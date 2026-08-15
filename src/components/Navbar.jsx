@@ -113,10 +113,12 @@ const Navbar = () => {
                   key={sectionId}
                   href={href}
                   onClick={(e) => handleNavClick(e, sectionId)}
-                  className={`text-[11px] tracking-[0.18em] uppercase pb-px transition-all duration-200 ${
+                  className={`relative text-[11px] tracking-[0.18em] uppercase pb-[3px] transition-colors duration-200 ${
                     isActive
-                      ? 'text-[#15180F] font-semibold border-b border-[#15180F]'
-                      : 'text-[#3A3D2F] font-medium border-b border-transparent hover:text-[#15180F] hover:border-[#3A3D2F]/40'
+                      ? 'text-[#15180F] font-semibold'
+                      : 'text-[#3A3D2F] font-medium hover:text-[#15180F]'
+                  } after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-px after:bg-[#15180F] after:transition-all after:duration-200 after:ease-out motion-reduce:after:transition-none ${
+                    isActive ? 'after:w-full' : 'after:w-0 hover:after:w-full'
                   }`}
                 >
                   {label}

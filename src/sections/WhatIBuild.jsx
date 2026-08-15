@@ -84,7 +84,7 @@ const ProjectCard = ({ project }) => (
         {project.tags.map((tag) => (
           <span
             key={tag}
-            className="border border-[#DE9F2E] text-[#DE9F2E] px-2.5 py-[4px] rounded-[4px]"
+            className="border border-[#DE9F2E]/60 text-[#DE9F2E] px-2.5 py-[4px] rounded-[4px] hover:scale-[1.03] hover:border-[#DE9F2E] transition-all duration-150 motion-reduce:transition-none cursor-default"
             style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10.5px', lineHeight: 1 }}
           >
             {tag}
