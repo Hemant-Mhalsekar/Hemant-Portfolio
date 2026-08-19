@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import emailjs from '@emailjs/browser';
+import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
 const SOCIAL_LINKS = [
   { id: 'email', label: <>Say hi <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(Email)</span></>, href: 'mailto:hemantmhalsekar1@gmail.com' },
@@ -8,35 +9,14 @@ const SOCIAL_LINKS = [
   { id: 'resume', label: <>Grab the resume <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(PDF)</span></>, href: '/resume.pdf', isDownload: true }
 ];
 
-const PREFERS_REDUCED =
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 const Contact = () => {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(PREFERS_REDUCED);
+  const { sectionRef, isVisible, fadeUp } = useScrollReveal(0.15);
 
   const formRef = useRef(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
-
-  useEffect(() => {
-    if (PREFERS_REDUCED || !sectionRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setIsVisible(true);
-        observer.disconnect();
-      },
-      { threshold: 0.15 }
-    );
-
-    observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -67,13 +47,7 @@ const Contact = () => {
     });
   };
 
-  const fadeUp = (delay = 0, duration = 550, ty = 20) => ({
-    opacity:    isVisible ? 1 : 0,
-    transform:  isVisible ? 'translateY(0)' : `translateY(${ty}px)`,
-    transition: PREFERS_REDUCED
-      ? 'none'
-      : `opacity ${duration}ms ease ${delay}ms, transform ${duration}ms ease ${delay}ms`,
-  });
+
 
   return (
     <section
@@ -217,7 +191,7 @@ const Contact = () => {
                     className="text-[#DE9F2E] text-sm"
                     style={{ fontFamily: "'Work Sans', sans-serif" }}
                   >
-                    sent. I'll get back to you soon.
+                    Sent. I'll get back to you soon.
                   </p>
                 )}
                 {error && (
@@ -225,7 +199,7 @@ const Contact = () => {
                     className="text-[#e27e7e] text-sm"
                     style={{ fontFamily: "'Work Sans', sans-serif" }}
                   >
-                    something broke. email me directly instead.
+                    Something went wrong. Email me directly instead.
                   </p>
                 )}
               </div>

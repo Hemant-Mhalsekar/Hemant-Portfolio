@@ -1,8 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
-const PREFERS_REDUCED =
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ── Static data ────────────────────────────────────────────────────────────────
 const QUESTIONS = [
@@ -44,12 +42,11 @@ const PULSE_CSS = `
 
 // ── HowIBuild ──────────────────────────────────────────────────────────────────
 const HowIBuild = () => {
-  const sectionRef    = useRef(null);
+  // Section entrance — shared hook handles observer + PREFERS_REDUCED
+  const { sectionRef, isVisible: sectionVisible } = useScrollReveal(0.06);
+
   const timelineRef   = useRef(null);
   const changeTimeout = useRef(null); // for fade-between click transitions
-
-  // Section entrance
-  const [sectionVisible, setSectionVisible] = useState(PREFERS_REDUCED);
 
   // Timeline draw + node fill states
   const [lineDrawn,    setLineDrawn]    = useState(PREFERS_REDUCED);        // triggers CSS width/height transition
@@ -61,21 +58,6 @@ const HowIBuild = () => {
   // Click-to-reveal
   const [activeNode, setActiveNode] = useState(null);
   const [isChanging, setIsChanging] = useState(false); // controls fade-between descriptions
-
-  // ── Section entrance observer ─────────────────────────────────────────────
-  useEffect(() => {
-    if (PREFERS_REDUCED || !sectionRef.current) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setSectionVisible(true);
-        obs.disconnect();
-      },
-      { threshold: 0.06 }
-    );
-    obs.observe(sectionRef.current);
-    return () => obs.disconnect();
-  }, []);
 
   // ── Timeline observer: draw line + stagger node fills ────────────────────
   useEffect(() => {

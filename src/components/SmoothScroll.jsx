@@ -1,9 +1,8 @@
-import React, { useEffect, createContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-export const LenisContext = createContext(null);
+import LenisContext from '../context/LenisContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,9 +27,8 @@ const SmoothScroll = ({ children }) => {
     lenis.on('scroll', ScrollTrigger.update);
 
     // Sync GSAP's requestAnimationFrame with Lenis
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
+    const onRaf = (time) => { lenis.raf(time * 1000); };
+    gsap.ticker.add(onRaf);
 
     // Prevent GSAP lag smoothing to avoid jumps during high load
     gsap.ticker.lagSmoothing(0);
@@ -41,11 +39,9 @@ const SmoothScroll = ({ children }) => {
     // Save instance to context
     setLenisInstance(lenis);
 
-    // Cleanup on unmount
+    // Cleanup on unmount — remove the exact same function reference
     return () => {
-      gsap.ticker.remove((time) => {
-        lenis.raf(time * 1000);
-      });
+      gsap.ticker.remove(onRaf);
       lenis.destroy();
     };
   }, []);

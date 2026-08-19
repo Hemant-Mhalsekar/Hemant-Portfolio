@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
 // ── Data ───────────────────────────────────────────────────────────────────────
 const PROJECTS = [
@@ -46,9 +47,6 @@ const PROJECTS = [
   },
 ];
 
-const PREFERS_REDUCED =
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ── Project Card ───────────────────────────────────────────────────────────────
 // Hover state managed via Tailwind `group` — no JS state per card needed.
@@ -136,33 +134,12 @@ const ChevronDown = () => (
   </svg>
 );
 
-// ── WhatIBuild Section ─────────────────────────────────────────────────────────
 const WhatIBuild = () => {
-  const sectionRef = useRef(null);
-
-  // Section header entrance — same pattern as Currently.jsx
-  const [sectionVisible, setSectionVisible] = useState(PREFERS_REDUCED);
+  const { sectionRef, isVisible: sectionVisible, fadeUp } = useScrollReveal(0.08);
 
   // Extra card reveal: tracks which of indices 3-5 are faded in
   const [showAll,       setShowAll]       = useState(false);
   const [revealedExtras, setRevealedExtras] = useState(new Set());
-
-  // ── Section entrance observer ───────────────────────────────────────────────
-  useEffect(() => {
-    if (PREFERS_REDUCED || !sectionRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setSectionVisible(true);
-        observer.disconnect();
-      },
-      { threshold: 0.08 }
-    );
-
-    observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   // ── "See more" handler ──────────────────────────────────────────────────────
   const handleSeeMore = () => {
@@ -185,15 +162,6 @@ const WhatIBuild = () => {
     // Store for cleanup if component unmounts mid-reveal
     return () => timeouts.forEach(clearTimeout);
   };
-
-  // ── CSS transition style factories ─────────────────────────────────────────
-  const fadeUp = (delay, duration = 550, ty = 20) => ({
-    opacity:   sectionVisible ? 1 : 0,
-    transform: sectionVisible ? 'translateY(0)' : `translateY(${ty}px)`,
-    transition: PREFERS_REDUCED
-      ? 'none'
-      : `opacity ${duration}ms ease ${delay}ms, transform ${duration}ms ease ${delay}ms`,
-  });
 
   return (
     <section

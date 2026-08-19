@@ -1,8 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
-
-const PREFERS_REDUCED =
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+import React, { useRef, useState } from 'react';
+import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
 const EXPERIENCE_DATA = [
   {
@@ -23,25 +20,8 @@ const EXPERIENCE_DATA = [
 ];
 
 const Experience = () => {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(PREFERS_REDUCED);
-  const [openItems, setOpenItems] = useState(new Set()); // allows multiple open
-
-  useEffect(() => {
-    if (PREFERS_REDUCED || !sectionRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setIsVisible(true);
-        observer.disconnect();
-      },
-      { threshold: 0.2 } // Trigger when a bit more of the section is visible
-    );
-
-    observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+  const { sectionRef, isVisible } = useScrollReveal(0.2);
+  const [openItems, setOpenItems] = useState(new Set());
 
   const toggleItem = (index) => {
     setOpenItems(prev => {
@@ -55,6 +35,7 @@ const Experience = () => {
     });
   };
 
+  // Experience uses a custom cubic-bezier easing — not using hook's fadeUp
   const fadeUp = (delay, duration = 600, ty = 24) => ({
     opacity:    isVisible ? 1 : 0,
     transform:  isVisible ? 'translateY(0)' : `translateY(${ty}px)`,

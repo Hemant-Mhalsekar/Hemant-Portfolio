@@ -1,8 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
-const PREFERS_REDUCED =
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ── Project data ───────────────────────────────────────────────────────────────
 // problem / built / learned copy is verbatim — do not paraphrase or shorten.
@@ -86,24 +84,7 @@ const STORY = [
 // Height animation uses grid-template-rows: 0fr → 1fr trick so the transition
 // works smoothly without a hardcoded max-height guess.
 const ProjectBlock = ({ project, index, isExpanded, onToggle }) => {
-  const blockRef = useRef(null);
-  const [visible, setVisible] = useState(PREFERS_REDUCED);
-
-  useEffect(() => {
-    if (PREFERS_REDUCED || !blockRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setVisible(true);
-        observer.disconnect();
-      },
-      { threshold: 0.06 }
-    );
-
-    observer.observe(blockRef.current);
-    return () => observer.disconnect();
-  }, []);
+  const { sectionRef: blockRef, isVisible: visible } = useScrollReveal(0.06);
 
   const isEven = index % 2 === 0;
 
@@ -286,8 +267,7 @@ const ProjectBlock = ({ project, index, isExpanded, onToggle }) => {
 
 // ── SelectedWork Section ───────────────────────────────────────────────────────
 const SelectedWork = () => {
-  const sectionRef = useRef(null);
-  const [headerVisible, setHeaderVisible] = useState(PREFERS_REDUCED);
+  const { sectionRef, isVisible: headerVisible, fadeUp } = useScrollReveal(0.05);
 
   // expandedId — which project's story is currently open (null = all closed)
   // Accordion: opening one automatically closes the previously open one.
@@ -296,32 +276,6 @@ const SelectedWork = () => {
   const handleToggle = (id) => {
     setExpandedId((prev) => (prev === id ? null : id));
   };
-
-  // Section-level observer — drives the section header entrance only.
-  // Each ProjectBlock manages its own observer independently.
-  useEffect(() => {
-    if (PREFERS_REDUCED || !sectionRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setHeaderVisible(true);
-        observer.disconnect();
-      },
-      { threshold: 0.05 }
-    );
-
-    observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const fadeUp = (delay, duration = 550, ty = 20) => ({
-    opacity:    headerVisible ? 1 : 0,
-    transform:  headerVisible ? 'translateY(0)' : `translateY(${ty}px)`,
-    transition: PREFERS_REDUCED
-      ? 'none'
-      : `opacity ${duration}ms ease ${delay}ms, transform ${duration}ms ease ${delay}ms`,
-  });
 
   return (
     <section

@@ -13,7 +13,6 @@
   --font-display: 'Bricolage Grotesque', sans-serif;
   --font-mono:    'IBM Plex Mono', monospace;
   --font-body:    'Work Sans', sans-serif;
-  --font-inter:   'Inter', sans-serif;
 }
 
 /* Terminal cursor blink — defined top-level so it is always registered */
@@ -24,7 +23,7 @@
 
 @layer base {
   html {
-    font-family: 'Work Sans', 'Inter', sans-serif;
+    font-family: 'Work Sans', sans-serif;
   }
 
   body {

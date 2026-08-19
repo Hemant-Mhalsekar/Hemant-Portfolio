@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-// useSectionHeading / useScrollReveal removed — this section drives
-// all entrance animations via CSS transitions + a single IntersectionObserver.
+import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
 // ── Data ───────────────────────────────────────────────────────────────────────
 const ITEMS = [
@@ -19,9 +18,6 @@ const DONE_INDICES = ITEMS.reduce((acc, item, i) => {
   return acc;
 }, []);
 
-const PREFERS_REDUCED =
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Animation timing constants (ms)
 const CARD_DELAY    = 300; // card entrance delay relative to section trigger
@@ -98,17 +94,16 @@ const ProgressCard = ({ checkedItems }) => (
 
 // ── Currently Section ──────────────────────────────────────────────────────────
 const Currently = () => {
-  const sectionRef = useRef(null);
+  // Section entrance — shared hook handles observer + PREFERS_REDUCED
+  const { sectionRef, isVisible: sectionVisible } = useScrollReveal(0.1);
 
-  // PREFERS_REDUCED → start in final state (visible, all done items struck)
-  const [sectionVisible, setSectionVisible] = useState(PREFERS_REDUCED);
-  const [checkedItems,    setCheckedItems]    = useState(
+  // PREFERS_REDUCED → start with all done items checked
+  const [checkedItems, setCheckedItems] = useState(
     () => PREFERS_REDUCED ? new Set(DONE_INDICES) : new Set()
   );
 
-  // ── Entrance + checklist observer ─────────────────────────────────────────
+  // ── Checklist stagger observer ──────────────────────────────────────────────
   useEffect(() => {
-    // Reduced motion: state initializers handle final state — nothing to do
     if (PREFERS_REDUCED || !sectionRef.current) return;
 
     const timeouts = [];
@@ -117,10 +112,7 @@ const Currently = () => {
       ([entry]) => {
         if (!entry.isIntersecting) return;
 
-        // 1. Trigger all CSS entrance transitions
-        setSectionVisible(true);
-
-        // 2. After card finishes entering, start staggered checks
+        // After card finishes entering, start staggered checks
         DONE_INDICES.forEach((itemIdx, order) => {
           const t = setTimeout(() => {
             setCheckedItems((prev) => new Set([...prev, itemIdx]));
