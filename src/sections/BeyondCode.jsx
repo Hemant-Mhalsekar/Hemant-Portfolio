@@ -1,8 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
+import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
-const PREFERS_REDUCED =
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const STATS = [
   {
@@ -28,32 +26,7 @@ const STATS = [
 ];
 
 const BeyondCode = () => {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(PREFERS_REDUCED);
-
-  useEffect(() => {
-    if (PREFERS_REDUCED || !sectionRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setIsVisible(true);
-        observer.disconnect();
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const fadeUp = (delay = 0, duration = 500, ty = 16) => ({
-    opacity:    isVisible ? 1 : 0,
-    transform:  isVisible ? 'translateY(0)' : `translateY(${ty}px)`,
-    transition: PREFERS_REDUCED
-      ? 'none'
-      : `opacity ${duration}ms ease ${delay}ms, transform ${duration}ms ease ${delay}ms`,
-  });
+  const { sectionRef, isVisible, fadeUp } = useScrollReveal(0.2);
 
   return (
     <section
