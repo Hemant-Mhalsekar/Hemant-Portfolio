@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 
 const SOCIAL_LINKS = [
-  { id: 'email', label: <>Say hey <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(Email)</span></>, href: 'mailto:hemantmhalsekar1@gmail.com' },
+  { id: 'email', label: <>Say hi <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(Email)</span></>, href: 'mailto:hemantmhalsekar1@gmail.com' },
   { id: 'linkedin', label: 'LinkedIn, if you must', href: 'https://www.linkedin.com/in/hemant-mhalsekar-464a50244/' },
   { id: 'github', label: <>See the code <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(GitHub)</span></>, href: 'https://github.com/Hemant-Mhalsekar' },
   { id: 'resume', label: <>Grab the resume <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(PDF)</span></>, href: '/resume.pdf', isDownload: true }
@@ -206,7 +206,7 @@ const Contact = () => {
                   className="bg-[#DE9F2E] text-[#15180F] border border-transparent font-medium px-7 py-3 rounded-[6px] hover:bg-[#d09123] transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                   style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '14px' }}
                 >
-                  {loading ? 'sending...' : 'send message'}
+                  {loading ? 'sending...' : 'Send message'}
                 </button>
               </div>
 
@@ -255,7 +255,7 @@ const Contact = () => {
                 className="text-[#CBD3B8] text-[12px]"
                 style={{ fontFamily: "'IBM Plex Mono', monospace" }}
               >
-                open to full-time and freelance work
+                Open to full-time and freelance work.
               </p>
             </div>
           </div>
