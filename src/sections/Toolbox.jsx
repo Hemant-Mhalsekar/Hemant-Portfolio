@@ -84,7 +84,7 @@ const Toolbox = () => {
               ...fadeUp(100, 550, 20),
             }}
           >
-            My toolbox
+            My Toolbox
           </h2>
         </div>
 
@@ -130,7 +130,7 @@ const Toolbox = () => {
               className="text-[#DE9F2E] tracking-[0.18em] uppercase mb-5"
               style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
             >
-              MOST COMFORTABLE WITH
+              COMFORT ZONE
             </p>
             <div className="flex flex-wrap gap-2.5">
               {COMFORTABLE.map(tool => (
@@ -151,7 +151,7 @@ const Toolbox = () => {
               className="text-[#F1ECDD] tracking-[0.18em] uppercase mb-5"
               style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
             >
-              CURRENTLY IMPROVING
+              STRETCHING A BIT
             </p>
             <div className="flex flex-wrap gap-2.5">
               {IMPROVING.map(tool => (
