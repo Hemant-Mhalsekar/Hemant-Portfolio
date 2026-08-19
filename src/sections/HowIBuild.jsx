@@ -14,12 +14,12 @@ const QUESTIONS = [
   {
     question: "Where's this going to fall apart?",
     answer:
-      "I try to find the drawbacks early, not after I've built the whole thing. Usually that means poking at the idea with AI tools to stress-test it, not to write it for me, but to catch the gaps I'd otherwise only find halfway through building.",
+      "I try to find the drawbacks early, not after I've built the whole thing. Usually that means sitting with the idea for a while and deliberately poking holes in it before I trust it enough to start.",
   },
   {
     question: "What's actually worth learning here, versus what I'm tempted to bolt on because it's new?",
     answer:
-      "I pick up something new on nearly every project. But if it doesn't genuinely fit what I'm building, I leave it out. Using a new tool because it's trending isn't the same as using it because it's right.",
+      "I pick up something new on nearly every project, but only if it genuinely fits. Trending isn't the same as right.",
   },
 ];
 
@@ -178,14 +178,14 @@ const HowIBuild = () => {
           key={stage.name}
           type="button"
           onClick={() => handleNodeClick(i)}
-          className="flex flex-col items-center gap-2 group"
-          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+          className="flex flex-col items-center group relative"
+          style={{ width: '14px', background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
           aria-label={`Stage: ${stage.name}`}
           aria-pressed={isActive}
         >
           <div className="group-hover:bg-[#DE9F2E]/50 group-hover:border-[#DE9F2E]" style={circleStyle} />
           <span
-            className="text-[#39471F] group-hover:font-semibold transition-all duration-200"
+            className="text-[#39471F] group-hover:font-semibold transition-all duration-200 absolute top-[100%] mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap"
             style={{
               fontFamily:  "'IBM Plex Mono', monospace",
               fontSize:    '12px',
@@ -201,13 +201,13 @@ const HowIBuild = () => {
     }
 
     // Vertical (mobile): circle left, label right
-      return (
+    return (
       <button
         key={stage.name}
         type="button"
         onClick={() => handleNodeClick(i)}
         className="flex flex-row items-center gap-4 text-left group"
-        style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+        style={{ height: '14px', background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
         aria-label={`Stage: ${stage.name}`}
         aria-pressed={isActive}
       >
@@ -341,16 +341,17 @@ const HowIBuild = () => {
               <div className="relative">
                 {/* Base track — olive at low opacity */}
                 <div
-                  className="absolute left-0 right-0 bg-[#39471F]/22"
-                  style={{ top: '7px', height: '2px' }}
+                  className="absolute bg-[#39471F]/22"
+                  style={{ left: '7px', right: '7px', top: '6px', height: '2px' }}
                 />
                 {/* Animated mustard overlay — draws left-to-right */}
                 <div
-                  className="absolute left-0 bg-[#DE9F2E]"
+                  className="absolute bg-[#DE9F2E]"
                   style={{
-                    top:        '7px',
+                    left:       '7px',
+                    top:        '6px',
                     height:     '2px',
-                    width:      lineDrawn ? '100%' : '0%',
+                    width:      lineDrawn ? 'calc(100% - 14px)' : '0%',
                     transition: PREFERS_REDUCED ? 'none' : 'width 1200ms linear',
                   }}
                 />
