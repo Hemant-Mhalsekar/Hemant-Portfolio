@@ -159,7 +159,7 @@ const Experience = () => {
                       className="text-[#DE9F2E] text-[12px] flex-shrink-0 transition-all duration-200 group-hover:translate-x-[2px] group-hover:brightness-110 motion-reduce:transition-none"
                       style={{ fontFamily: "'IBM Plex Mono', monospace" }}
                     >
-                      {isOpen ? '- close' : '+ details'}
+                      {isOpen ? '- Close' : '+ Details'}
                     </span>
                   </div>
 
