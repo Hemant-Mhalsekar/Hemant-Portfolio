@@ -67,17 +67,22 @@ const Footer = () => {
           {/* Right column — nav links (hidden on small screens, inline row on md+) */}
           <nav aria-label="Footer navigation">
             {/* Desktop: vertical stack */}
-            <ul className="hidden md:flex md:flex-col md:items-end gap-2.5">
-              {NAV_LINKS.map(({ label, sectionId }) => (
-                <li key={sectionId}>
-                  <button
-                    onClick={() => scrollTo(sectionId)}
-                    className="text-[#CBD3B8] opacity-50 hover:opacity-100 hover:text-[#DE9F2E] transition-all duration-200"
-                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '12px', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-                  >
-                    {label}
-                  </button>
-                </li>
+            <ul className="hidden md:flex md:flex-row md:items-center gap-4">
+              {NAV_LINKS.map(({ label, sectionId }, i) => (
+                <React.Fragment key={sectionId}>
+                  {i > 0 && (
+                    <li aria-hidden="true" className="text-[#CBD3B8] opacity-25 select-none" style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}>·</li>
+                  )}
+                  <li>
+                    <button
+                      onClick={() => scrollTo(sectionId)}
+                      className="text-[#CBD3B8] opacity-40 hover:opacity-100 hover:text-[#DE9F2E] transition-all duration-200"
+                      style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                    >
+                      {label}
+                    </button>
+                  </li>
+                </React.Fragment>
               ))}
             </ul>
             {/* Mobile: horizontal row */}
