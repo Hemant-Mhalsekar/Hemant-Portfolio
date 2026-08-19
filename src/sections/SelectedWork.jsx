@@ -135,23 +135,29 @@ const ProjectBlock = ({ project, index, isExpanded, onToggle }) => {
           className="w-full text-left py-10 sm:py-12 group"
           style={{ cursor: 'pointer', background: 'none', border: 'none', padding: '2.5rem 0' }}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-[140px_1fr] gap-x-8 gap-y-3">
+          <div className="flex flex-col">
+            {/* Top row: Number and Name in a shared flex row, strictly vertically centered */}
+            <div className="flex items-center gap-6 sm:gap-8">
+              {/* Index label */}
+              <div className="flex-shrink-0 opacity-25 pointer-events-none select-none">
+                <span
+                  className="text-[#DE9F2E]"
+                  style={{ 
+                    fontFamily: "'Bricolage Grotesque', sans-serif", 
+                    fontSize: 'clamp(64px, 6vw, 72px)', 
+                    fontWeight: 800,
+                    lineHeight: 0.8,
+                    letterSpacing: '-0.02em',
+                    fontVariantNumeric: 'tabular-nums'
+                  }}
+                >
+                  {project.id}
+                </span>
+              </div>
 
-            {/* Index label */}
-            <div className="lg:pt-[0.55rem]">
-              <span
-                className="text-[#DE9F2E] tracking-[0.22em]"
-                style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
-              >
-                {project.id}
-              </span>
-            </div>
-
-            {/* Name — tags — hook — toggle */}
-            <div>
               {/* Project name */}
               <h3
-                className="text-[#CBD3B8] tracking-tight leading-[0.95]"
+                className="text-[#CBD3B8] tracking-tight leading-[0.95] min-w-0"
                 style={{
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontSize:   'clamp(2.5rem, 5vw, 3.5rem)',
@@ -160,7 +166,10 @@ const ProjectBlock = ({ project, index, isExpanded, onToggle }) => {
               >
                 {project.name}
               </h3>
+            </div>
 
+            {/* Bottom row: Tags, hook, toggle */}
+            <div className="mt-4 lg:ml-[116px]">
               {/* Tech tags */}
               <div className="flex flex-wrap gap-2 mt-4">
                 {project.tags.map((tag) => (
