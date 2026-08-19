@@ -26,12 +26,12 @@ const PREFERS_REDUCED =
 // Animation timing constants (ms)
 const CARD_DELAY    = 300; // card entrance delay relative to section trigger
 const CARD_DURATION = 500; // card transition duration
-const STRIKE_BUFFER = 200; // gap between card finishing and strikes starting
-const STRIKE_START  = CARD_DELAY + CARD_DURATION + STRIKE_BUFFER; // 1000ms
+const CHECK_BUFFER  = 200; // gap between card finishing and checks starting
+const CHECK_START   = CARD_DELAY + CARD_DURATION + CHECK_BUFFER; // 1000ms
 
 // ── Progress Card ──────────────────────────────────────────────────────────────
 // Simplified from forwardRef — section observer now drives all timing.
-const ProgressCard = ({ struckItems }) => (
+const ProgressCard = ({ checkedItems }) => (
   <div
     className="bg-[#39471F] px-9 py-10 sm:px-11 sm:py-11"
     style={{ transform: 'rotate(-1deg)', borderRadius: '18px' }}
@@ -45,32 +45,31 @@ const ProgressCard = ({ struckItems }) => (
 
     <div className="flex flex-col gap-[18px]">
       {ITEMS.map((item, i) => {
-        const isStruck = struckItems.has(i);
-        const textOpacity =
-          item.status === 'done' && isStruck ? 0.55 :
-          item.status === 'queued'            ? 0.40 : 1;
+        const isChecked = checkedItems.has(i);
+        const textOpacity = item.status === 'queued' ? 0.7 : 1;
 
         return (
-          <div key={i} className="flex items-center gap-3">
-            {/* Marker column — dot for every row, style varies by status */}
-            <span className="flex-shrink-0 w-3 flex items-center justify-center">
+          <div key={i} className="flex items-center gap-4">
+            {/* Marker column */}
+            <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
               {item.status === 'done' && (
-                // Filled mustard dot — fades in sync with the struck text
                 <span
-                  className="block w-[6px] h-[6px] rounded-full bg-[#DE9F2E]"
-                  style={{ opacity: textOpacity, transition: 'opacity 350ms ease' }}
-                />
+                  className="flex items-center justify-center w-full h-full rounded-[3px] bg-[#DE9F2E]"
+                  style={{ 
+                    transform: isChecked || PREFERS_REDUCED ? 'scale(1)' : 'scale(0)',
+                    transition: PREFERS_REDUCED ? 'none' : 'transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  }}
+                >
+                  <svg viewBox="0 0 14 14" fill="none" className="w-2.5 h-2.5">
+                    <path d="M3 7.5L5.5 10L11 4" stroke="#15180F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
               )}
               {item.status === 'in-progress' && (
-                // Filled mustard dot — full opacity, unchanged
-                <span className="block w-[6px] h-[6px] rounded-full bg-[#DE9F2E]" />
+                <span className="w-full h-full rounded-[3px] border-[1.5px] border-dashed border-[#DE9F2E]" />
               )}
               {item.status === 'queued' && (
-                // Hollow outlined dot — dim to match queued text opacity
-                <span
-                  className="block w-[6px] h-[6px] rounded-full"
-                  style={{ border: '1px solid rgba(203,211,184,0.4)', opacity: 0.55 }}
-                />
+                <span className="w-full h-full rounded-[3px] border-[1.5px] border-solid border-[#CBD3B8] opacity-50" />
               )}
             </span>
 
@@ -84,29 +83,11 @@ const ProgressCard = ({ struckItems }) => (
                   color: '#CBD3B8',
                   opacity: textOpacity,
                   fontStyle: item.status === 'in-progress' ? 'italic' : 'normal',
-                  transition: 'opacity 350ms ease',
                   lineHeight: 1.2,
                 }}
               >
                 {item.text}
               </span>
-
-              {item.status === 'done' && (
-                <span
-                  aria-hidden="true"
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: 0,
-                    height: '1.5px',
-                    width: isStruck ? '100%' : '0%',
-                    backgroundColor: '#DE9F2E',
-                    transform: 'translateY(-50%)',
-                    transition: PREFERS_REDUCED ? 'none' : 'width 450ms ease',
-                    pointerEvents: 'none',
-                  }}
-                />
-              )}
             </div>
           </div>
         );
@@ -121,7 +102,7 @@ const Currently = () => {
 
   // PREFERS_REDUCED → start in final state (visible, all done items struck)
   const [sectionVisible, setSectionVisible] = useState(PREFERS_REDUCED);
-  const [struckItems,    setStruckItems]    = useState(
+  const [checkedItems,    setCheckedItems]    = useState(
     () => PREFERS_REDUCED ? new Set(DONE_INDICES) : new Set()
   );
 
@@ -139,11 +120,11 @@ const Currently = () => {
         // 1. Trigger all CSS entrance transitions
         setSectionVisible(true);
 
-        // 2. After card finishes entering, start staggered strikes
+        // 2. After card finishes entering, start staggered checks
         DONE_INDICES.forEach((itemIdx, order) => {
           const t = setTimeout(() => {
-            setStruckItems((prev) => new Set([...prev, itemIdx]));
-          }, STRIKE_START + order * 150);
+            setCheckedItems((prev) => new Set([...prev, itemIdx]));
+          }, CHECK_START + order * 150);
           timeouts.push(t);
         });
 
@@ -286,7 +267,7 @@ const Currently = () => {
           {/* ── RIGHT COLUMN ─────────────────────────────────────────────── */}
           {/* 5 ▸ Card — fade + slide 24px from right, 300ms delay */}
           <div style={fadeRight(300, 500)}>
-            <ProgressCard struckItems={struckItems} />
+            <ProgressCard checkedItems={checkedItems} />
           </div>
 
         </div>
