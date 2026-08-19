@@ -330,7 +330,7 @@ const HowIBuild = () => {
             className="text-[#39471F] tracking-[0.18em] uppercase mb-8 sm:mb-10"
             style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
           >
-            my actual process
+            how it actually goes
           </p>
 
           {/* Timeline — dual layout: horizontal md+, vertical < md */}
@@ -392,7 +392,7 @@ const HowIBuild = () => {
           {/* ── Description area: tap-a-step prompt → node description ── */}
           {/* Whole area fades out/in on click; content swaps mid-fade */}
           <div
-            className="mt-8 sm:mt-10 md:flex md:justify-center"
+            className="mt-16 sm:mt-18 md:flex md:justify-center"
             style={{
               minHeight:  '3.5em',
               opacity:    isChanging ? 0 : 1,
