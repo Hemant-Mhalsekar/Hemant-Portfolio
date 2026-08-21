@@ -1,4 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="8" fill="#6366f1"/>
-  <text x="16" y="22" font-family="Arial, sans-serif" font-size="16" font-weight="900" fill="white" text-anchor="middle">HM</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!--
+    Hemant Mhalsekar — personal favicon
+    Mark: <h>  (angle brackets + lowercase h)
+    Canvas: 512×512, fully geometric paths — no text, no fonts, no strokes
+    Colors: #15180F background (ink), #F1ECDD foreground (cream)
+
+    Layout (symmetric around x=256, y=256):
+      <  bracket  : x  40–155  (tip at 40, base at 155)
+      h  letter   : x 170–348  (left stem 170–234, gap 234–284, right stem 284–348)
+      >  bracket  : x 357–472  (base at 357, tip at 472)
+      vertical    : y  92–420  (top margin 92, bottom margin 92)
+
+    Arm/stroke thickness at 512px → ~60px (≈ 3.75px at 32px, ≈ 1.9px at 16px)
+  -->
+
+  <!-- Background: dark ink, soft app-icon rounded corners -->
+  <rect width="512" height="512" rx="90" fill="#15180F"/>
+
+  <!--
+    < bracket
+    Outer chevron: (155,92) → (40,256) → (155,420)
+    Inner chevron: (155,158) → (102,256) → (155,354)
+    The even-odd fill reveals the hollow interior.
+    Arm thickness at base ≈ 66px; at tip ≈ 63px.
+  -->
+  <path
+    d="M155,92 L40,256 L155,420 L155,354 L102,256 L155,158 Z"
+    fill="#F1ECDD"
+    fill-rule="evenodd"/>
+
+  <!--
+    h letterform — three contiguous filled rectangles
+    Left stem  : x=170–234, y=92–420  (full height, 64px wide)
+    Bridge     : x=234–284, y=210–276 (crossbar connecting stems, 50×66px)
+    Right stem : x=284–348, y=210–420 (lower portion only, 64px wide, 210px tall)
+
+    Void above right stem (x=234–348, y=92–210) = background shows through = arch opening
+    Void between stems below bridge (x=234–284, y=276–420) = background shows through = h gap
+  -->
+  <!-- Left stem -->
+  <rect x="170" y="92"  width="64" height="328" fill="#F1ECDD"/>
+  <!-- Bridge / arch connector -->
+  <rect x="234" y="210" width="50" height="66"  fill="#F1ECDD"/>
+  <!-- Right stem -->
+  <rect x="284" y="210" width="64" height="210" fill="#F1ECDD"/>
+
+  <!--
+    > bracket  (mirror of < around x=256)
+    Outer chevron: (357,92) → (472,256) → (357,420)
+    Inner chevron: (357,158) → (410,256) → (357,354)
+  -->
+  <path
+    d="M357,92 L472,256 L357,420 L357,354 L410,256 L357,158 Z"
+    fill="#F1ECDD"
+    fill-rule="evenodd"/>
 </svg>
