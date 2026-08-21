@@ -1,93 +1,92 @@
 # Hemant Mhalsekar — Full Stack Developer Portfolio
 
 <div align="center">
-  <img src="./public/favicon.ico" alt="Logo" width="80" height="80" />
+  <img src="./public/favicon.svg" alt="Logo" width="80" height="80" />
   <p align="center">
-    <strong>A high-performance, premium portfolio experience.</strong>
+    <strong>A high-performance, editorial portfolio experience.</strong>
     <br />
-    Built with React 19, Vite, Tailwind CSS v4, and GSAP.
+    Built with React 19, Vite, and Tailwind CSS v4.
     <br />
-    <a href="https://hemant-mhalsekar.netlify.app/"><strong>View Live Portfolio »</strong></a>
+    <a href="https://hemant-mhalsekar.netlify.app/"><strong>View Live Portfolio</strong></a>
   </p>
 </div>
 
 ---
 
-## 🚀 Overview
+## Overview
 
-This is a modern, professional portfolio website designed to showcase full-stack development expertise with a focus on **visual excellence** and **smooth user experience**. It features a flat, editorial design system, interactive terminal elements, and a performance-first architecture.
+A personal portfolio built to present full-stack development work with clarity and restraint. The site uses a flat, editorial design system, interactive terminal-style elements, and a performance-first architecture, prioritizing fast load times and accessible interaction over decorative effects.
 
-## ✨ Key Features
+## Key Features
 
-- **Editorial Aesthetics**: A clean, flat design system utilizing a curated palette (cream, ink, olive, and mustard).
-- **Interactive Terminal**: A dynamic, animated typewriter widget greeting visitors in the hero section.
-- **Scroll-Triggered Animations**: Purposeful scroll reveals and smooth entrance animations.
-- **Accordion Storytelling**: Project details and experience are presented via interactive accordion layouts.
-- **Accessible Design**: Strictly respects `prefers-reduced-motion` settings and follows semantic HTML best practices.
-- **Automated Contact**: Integrated email flow via EmailJS for friction-free connections.
+- **Editorial design system**: a flat, curated color palette (cream, ink, olive, mustard) with no gradients or glow effects
+- **Interactive terminal widget**: an animated typewriter element in the hero section
+- **Scroll-triggered animations**: reveal animations built on IntersectionObserver, respecting `prefers-reduced-motion` throughout
+- **Accordion-based storytelling**: project details and experience entries expand on interaction rather than displaying all content at once
+- **Accessible by default**: semantic HTML, reduced-motion support, and keyboard-navigable interactive elements
+- **Integrated contact flow**: EmailJS-powered contact form, no backend required
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
-- **Framework**: [React 19](https://react.dev/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **Animations**: CSS Transitions & IntersectionObserver, [GSAP](https://greensock.com/gsap/) (for Navbar), & [Lenis Smooth Scroll](https://github.com/darkroomengineering/lenis)
+- **Framework**: React 19
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS v4
+- **Animation**: CSS transitions and IntersectionObserver for scroll reveals; GSAP for the navbar entrance animation; Lenis for smooth scroll
 
-### Tools & Deployment
-- **Hosting**: [Vercel](https://vercel.com/) / [Netlify](https://www.netlify.com/)
-- **Icons**: [Simple Icons](https://simpleicons.org/)
-- **Version Control**: Git & GitHub
+### Tools and Deployment
+- **Hosting**: Netlify
+- **Version Control**: Git and GitHub
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 src/
-├── components/         # Reusable UI components (Navbar, NoiseOverlay, etc.)
-├── hooks/              # Custom React hooks
-├── sections/           # Major page sections (Hero, WhatIBuild, SelectedWork, Contact, etc.)
-├── App.jsx             # Root application component
-└── index.css           # Global styles and Tailwind configuration
+├── components/         # Reusable UI components (Navbar, Footer, NoiseOverlay, SmoothScroll)
+├── context/             # React context providers
+├── hooks/               # Custom React hooks (scroll-reveal logic, motion preferences)
+├── sections/            # Page sections (Hero, Currently, WhatIBuild, SelectedWork, HowIBuild, Toolbox, Experience, BeyondCode, Contact)
+├── App.jsx              # Root application component
+└── index.css            # Global styles and Tailwind configuration
 ```
 
-## 🏗️ Local Development
+## Local Development
 
-1. **Clone the repository:**
-   ```bash
+1. Clone the repository:
+```bash
    git clone https://github.com/Hemant-Mhalsekar/Hemant-Portfolio.git
    cd Hemant-Portfolio
-   ```
+```
 
-2. **Install dependencies:**
-   ```bash
+2. Install dependencies:
+```bash
    npm install
-   ```
+```
 
-3. **Start the development server:**
-   ```bash
+3. Start the development server:
+```bash
    npm run dev
-   ```
+```
 
-4. **Build for production:**
-   ```bash
+4. Build for production:
+```bash
    npm run build
-   ```
+```
 
-## 🌟 Featured Projects
+## Featured Projects
 
-- **Veyra**: A full e-commerce platform for a Kuwait-based food brand — started as a landing page, grew into a complete storefront.
-- **Real-Time AI Surveillance System**: Watches live video and flags loitering, running, or intrusion using YOLOv8 and heuristics.
+- **Veyra**: A full e-commerce platform for a Kuwait-based food brand, starting as a landing page and growing into a complete storefront.
+- **Real-Time AI Surveillance System**: Flags loitering, running, and intrusion in live video using YOLOv8, motion tracking, and a trained classifier.
 - **TaskPilot**: A Kanban board that ranks tasks by urgency and breaks them into subtasks using an LLM.
-- **CO-PO Mapper**: Replaced a manual Excel process for academic outcome reporting — entirely in-browser.
+- **CO-PO Mapper**: Replaced a manual Excel process for academic outcome reporting, running entirely in-browser with no backend.
 - **Shortify**: A URL shortener with Google sign-in, click tracking, and a rate-limited API, built on Spring Boot.
-- **Library Management System**: A console-based library system in Java and MySQL with a fine engine that enforces a grace period.
+- **Library Management System**: A console-based library system in Java and MySQL, with a fine engine that enforces a grace period.
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Hemant Mhalsekar**
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/hemant-mhalsekar)
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Hemant-Mhalsekar)
-
