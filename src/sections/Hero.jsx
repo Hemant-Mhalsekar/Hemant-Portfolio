@@ -221,7 +221,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen bg-[#F1ECDD] overflow-hidden flex flex-col justify-center pt-14"
+      className="relative min-h-screen bg-[#F1ECDD] overflow-x-hidden flex flex-col justify-center pt-14"
     >
       <style>{`
         @keyframes scrollDotDrop {
@@ -240,7 +240,7 @@ const Hero = () => {
         className="absolute bottom-0 left-0 pointer-events-none select-none"
         style={{ 
           lineHeight: 0.85,
-          transform: prefersReduced ? 'none' : `translateY(${scrollY * 0.4}px)`,
+          transform: prefersReduced ? 'none' : `translateY(${Math.max(scrollY * -0.25, -60)}px)`,
           transition: prefersReduced ? 'none' : 'transform 0.1s ease-out'
         }}
       >
@@ -250,7 +250,6 @@ const Hero = () => {
             fontFamily: "'Bricolage Grotesque', sans-serif",
             fontSize: 'clamp(5.5rem, 17vw, 16rem)',
             opacity: 0.045,
-            transform: 'translateY(14%)',
           }}
         >
           DEVELOPER
@@ -283,7 +282,7 @@ const Hero = () => {
               className="font-black leading-[0.93] tracking-tight text-[#15180F] mb-8"
               style={{
                 fontFamily: "'Bricolage Grotesque', sans-serif",
-                fontSize: 'clamp(2.4rem, 5vw, 4.8rem)',
+                fontSize: 'clamp(2.1rem, 4.2vw, 3.8rem)',
                 opacity: 0,
               }}
             >

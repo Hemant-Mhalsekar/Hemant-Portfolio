@@ -10,7 +10,7 @@ const EXPERIENCE_DATA = [
   {
     role: "Web Developer Intern — Dnyanprassarak Mandal's College",
     date: "Oct 2023 – Dec 2023",
-    description: "Built CO-PO Mapper, a faculty tool covering course setup, Excel roster upload, marks entry, CO-PO correlation mapping, and print-ready reports, using React and Zustand. Replaced a manual Excel process used across 8+ courses a semester, cutting reporting effort by an estimated 70%."
+    description: "Built CO-PO Mapper, a faculty tool covering course setup, Excel roster upload, marks entry, CO-PO correlation mapping, and print-ready reports, using React and Zustand. Replaced a manual Excel process used across 8+ courses a semester, cutting reporting effort by an estimated 70%. Afterward, worked with the team to redesign the college's website, new visual design, rewritten content, and a cleaner UI, built in WordPress using Elementor. It's still the live site today."
   },
   {
     role: "Web Developer Intern — HDSOFT Technologies",
