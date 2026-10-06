@@ -77,13 +77,18 @@ const BeyondCode = () => {
           }}
         >
           I read a lot of self-help books, or I mean to. There's a pile of them next 
-          to my desk that keeps growing faster than I finish them. When I'm not 
-          half-reading something, I'm usually deep in a PC game, sometimes at a gaming 
-          cafe with a friend when I want the actual arcade version of it, not just my 
-          desk. I've got a genuinely large anime collection at this point, and if 
-          there's a Marvel movie out, I'm at the theater with friends opening week, 
-          no question. Most of my time outside code is just that, hanging out with 
-          people, not doing anything that needs a caption.
+          to my desk that keeps growing faster than I finish them. Lately I've 
+          actually been reading more though, I found Substack while trying to cut 
+          down on social media, and it turns out there's a genuinely good alternative 
+          to doomscrolling if you look in the right place. When I'm not reading 
+          something, I'm usually deep in a PC game, sometimes at a gaming cafe with a 
+          friend when I want the actual arcade version of it, not just my desk. I've 
+          got a genuinely large anime collection at this point, and if there's a 
+          Marvel movie out, I'm at the theater with friends opening week, no 
+          question. I'm also always up for trying a new restaurant, if there's a 
+          place I haven't been, I'm probably dragging a friend there soon. Most of my 
+          time outside code is just that, hanging out with people, not doing anything 
+          that needs a caption.
         </p>
           </div>
 
