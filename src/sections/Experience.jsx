@@ -3,6 +3,11 @@ import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
 const EXPERIENCE_DATA = [
   {
+    role: "QA Intern — Evaratus (formerly Scaler AI Labs)",
+    date: "Sep 2026 – Present",
+    description: "Full-time internship doing quality analysis on annotated data. I review other people's annotations against project guidelines, flag errors, and give feedback to the annotators. The data is mixed depending on the project: text, images, audio, code, and LLM outputs. I also clean and annotate data myself, working with the team on in-house annotation platforms. So far that's 3,000+ files annotated and 2,000+ reviewed. Client and project details are confidential."
+  },
+  {
     role: "Freelance Full Stack Developer — VEYRA",
     date: "Nov 2025 – Jan 2026",
     description: "Built a full stack e-commerce platform with React, Tailwind, Node and Express, product catalog, dynamic forms, JWT auth, MongoDB backend. Integrated Stripe end to end, checkout through order confirmation. Delivered on a compressed timeline while the client's requirements kept shifting, and handled domain and hosting setup myself. Storefront pages held a Lighthouse score above 75."
