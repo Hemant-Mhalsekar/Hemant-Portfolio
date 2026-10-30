@@ -2,6 +2,15 @@ import React, { useState, useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
+// EmailJS keys come from env vars (see .env.example). If any are missing,
+// the form shows the "email me directly" fallback instead of failing silently.
+const EMAIL_CONFIG = {
+  serviceId:  import.meta.env.VITE_EMAIL_SERVICE_ID,
+  templateId: import.meta.env.VITE_EMAIL_TEMPLATE_ID,
+  publicKey:  import.meta.env.VITE_EMAIL_PUBLIC_KEY,
+};
+const EMAIL_CONFIGURED = Object.values(EMAIL_CONFIG).every(Boolean);
+
 const SOCIAL_LINKS = [
   { id: 'email', label: <>Say hi <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(Email)</span></>, href: 'mailto:hemantmhalsekar1@gmail.com' },
   { id: 'linkedin', label: 'LinkedIn, if you must', href: 'https://www.linkedin.com/in/hemant-mhalsekar-464a50244/' },
@@ -25,16 +34,23 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
-    
+
+    if (!EMAIL_CONFIGURED) {
+      console.warn('Contact form: EmailJS env vars are missing (VITE_EMAIL_*).');
+      setSuccess(false);
+      setError(true);
+      return;
+    }
+
     setLoading(true);
     setSuccess(false);
     setError(false);
 
     emailjs.sendForm(
-      import.meta.env.VITE_EMAIL_SERVICE_ID,
-      import.meta.env.VITE_EMAIL_TEMPLATE_ID,
+      EMAIL_CONFIG.serviceId,
+      EMAIL_CONFIG.templateId,
       formRef.current,
-      import.meta.env.VITE_EMAIL_PUBLIC_KEY,
+      EMAIL_CONFIG.publicKey,
     ).then(() => {
       setLoading(false);
       setSuccess(true);
@@ -199,7 +215,8 @@ const Contact = () => {
                     className="text-[#e27e7e] text-sm"
                     style={{ fontFamily: "'Work Sans', sans-serif" }}
                   >
-                    Something went wrong. Email me directly instead.
+                    Something went wrong. Email me directly at{' '}
+                    <a href="mailto:hemantmhalsekar1@gmail.com" className="underline">hemantmhalsekar1@gmail.com</a>.
                   </p>
                 )}
               </div>
