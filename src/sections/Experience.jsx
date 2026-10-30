@@ -106,8 +106,7 @@ const Experience = () => {
               return (
                 <div
                   key={index}
-                  className="relative group cursor-pointer"
-                  onClick={() => toggleItem(index)}
+                  className="relative"
                   style={fadeUp(delay, 600, 24)}
                 >
                   {/* Timeline Node */}
@@ -120,7 +119,15 @@ const Experience = () => {
                     aria-hidden="true"
                   />
 
-                  {/* Date & Toggle */}
+                  {/* Clickable header — keyboard accessible toggle */}
+                  <button
+                    type="button"
+                    onClick={() => toggleItem(index)}
+                    aria-expanded={isOpen}
+                    aria-controls={`experience-${index}`}
+                    className="group block w-full text-left cursor-pointer bg-transparent border-0 p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#DE9F2E]"
+                  >
+                  {/* Date */}
                   <div className="flex items-center gap-4 mb-2">
                     <span
                       className="text-[#DE9F2E] text-sm uppercase tracking-wide"
@@ -148,9 +155,11 @@ const Experience = () => {
                       {isOpen ? '- Close' : '+ Details'}
                     </span>
                   </div>
+                  </button>
 
                   {/* Accordion Body */}
                   <div
+                    id={`experience-${index}`}
                     className={`grid transition-all duration-400 ease-in-out motion-reduce:transition-none ${
                       isOpen ? 'grid-rows-[1fr] mt-4' : 'grid-rows-[0fr] mt-0'
                     }`}
