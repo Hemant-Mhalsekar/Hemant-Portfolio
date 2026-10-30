@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import emailjs from '@emailjs/browser';
-import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const SOCIAL_LINKS = [
   { id: 'email', label: <>Say hi <span className="opacity-60 text-[12px] ml-1.5 tracking-wide">(Email)</span></>, href: 'mailto:hemantmhalsekar1@gmail.com' },
@@ -10,7 +10,7 @@ const SOCIAL_LINKS = [
 ];
 
 const Contact = () => {
-  const { sectionRef, isVisible, fadeUp } = useScrollReveal(0.15);
+  const { sectionRef, fadeUp } = useScrollReveal(0.15);
 
   const formRef = useRef(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });

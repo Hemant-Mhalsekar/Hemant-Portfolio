@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
 // ── Data ───────────────────────────────────────────────────────────────────────
@@ -135,7 +135,7 @@ const ChevronDown = () => (
 );
 
 const WhatIBuild = () => {
-  const { sectionRef, isVisible: sectionVisible, fadeUp } = useScrollReveal(0.08);
+  const { sectionRef, fadeUp } = useScrollReveal(0.08);
 
   // Extra card reveal: tracks which of indices 3-5 are faded in
   const [showAll,       setShowAll]       = useState(false);

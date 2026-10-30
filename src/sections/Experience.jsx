@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
 const EXPERIENCE_DATA = [

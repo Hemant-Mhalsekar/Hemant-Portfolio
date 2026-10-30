@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
 
@@ -267,7 +267,7 @@ const ProjectBlock = ({ project, index, isExpanded, onToggle }) => {
 
 // ── SelectedWork Section ───────────────────────────────────────────────────────
 const SelectedWork = () => {
-  const { sectionRef, isVisible: headerVisible, fadeUp } = useScrollReveal(0.05);
+  const { sectionRef, fadeUp } = useScrollReveal(0.05);
 
   // expandedId — which project's story is currently open (null = all closed)
   // Accordion: opening one automatically closes the previously open one.
