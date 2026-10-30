@@ -131,7 +131,7 @@ const Currently = () => {
       observer.disconnect();
       timeouts.forEach(clearTimeout);
     };
-  }, []);
+  }, [sectionRef]);
 
   // ── CSS transition style factories ────────────────────────────────────────
   // Close over `sectionVisible` so each call reflects current state.
