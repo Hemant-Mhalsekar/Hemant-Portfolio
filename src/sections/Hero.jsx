@@ -118,7 +118,7 @@ const TerminalWidget = () => {
 
 // ── Hero Section ───────────────────────────────────────────────────────────────
 const Hero = () => {
-  const [scrollY, setScrollY] = useState(0);
+  const ghostRef    = useRef(null); // parallax "DEVELOPER" word — moved directly, no re-renders
 
   const eyebrowRef  = useRef(null);
   const headlineRef = useRef(null);
@@ -134,9 +134,10 @@ const Hero = () => {
     const animRefs = [eyebrowRef, headlineRef, subheadRef, ctaRef, metaRef, terminalRef, scrollCueRef, statusChipRef];
 
     const handleScroll = () => {
-      // Limit parallax updates to when the hero is somewhat in view
-      if (window.scrollY < window.innerHeight * 1.5) {
-        setScrollY(window.scrollY);
+      // Limit parallax updates to when the hero is somewhat in view.
+      // Writes the transform straight to the DOM so the Hero doesn't re-render on scroll.
+      if (window.scrollY < window.innerHeight * 1.5 && ghostRef.current) {
+        ghostRef.current.style.transform = `translateY(${Math.max(window.scrollY * -0.25, -60)}px)`;
       }
     };
 
@@ -228,11 +229,11 @@ const Hero = () => {
       {/* Large, low-opacity "DEVELOPER" anchored to bottom-left. overflow-hidden
           on the section clips it so it bleeds naturally below the fold. */}
       <div
+        ref={ghostRef}
         aria-hidden="true"
         className="absolute bottom-0 left-0 pointer-events-none select-none"
         style={{ 
           lineHeight: 0.85,
-          transform: PREFERS_REDUCED ? 'none' : `translateY(${Math.max(scrollY * -0.25, -60)}px)`,
           transition: PREFERS_REDUCED ? 'none' : 'transform 0.1s ease-out'
         }}
       >
