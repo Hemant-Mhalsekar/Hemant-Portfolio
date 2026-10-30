@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
+import { PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -24,10 +25,8 @@ const TerminalWidget = () => {
   const [done,        setDone]        = useState(false);
 
   useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     // Reduced motion: show all lines instantly, no animation
-    if (prefersReduced) {
+    if (PREFERS_REDUCED) {
       setLines(SEQUENCE);
       setDone(true);
       return;
@@ -123,7 +122,6 @@ const TerminalWidget = () => {
 
 // ── Hero Section ───────────────────────────────────────────────────────────────
 const Hero = () => {
-  const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const [scrollY, setScrollY] = useState(0);
 
   const eyebrowRef  = useRef(null);
@@ -136,8 +134,6 @@ const Hero = () => {
   const statusChipRef = useRef(null);
 
   useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     // All elements with opacity:0 initial style — collect for easy manipulation
     const animRefs = [eyebrowRef, headlineRef, subheadRef, ctaRef, metaRef, terminalRef, scrollCueRef, statusChipRef];
 
@@ -148,7 +144,7 @@ const Hero = () => {
       }
     };
 
-    if (prefersReduced) {
+    if (PREFERS_REDUCED) {
       // Show everything immediately — no animation
       animRefs.forEach((r) => { if (r.current) r.current.style.opacity = '1'; });
       return;
@@ -240,8 +236,8 @@ const Hero = () => {
         className="absolute bottom-0 left-0 pointer-events-none select-none"
         style={{ 
           lineHeight: 0.85,
-          transform: prefersReduced ? 'none' : `translateY(${Math.max(scrollY * -0.25, -60)}px)`,
-          transition: prefersReduced ? 'none' : 'transform 0.1s ease-out'
+          transform: PREFERS_REDUCED ? 'none' : `translateY(${Math.max(scrollY * -0.25, -60)}px)`,
+          transition: PREFERS_REDUCED ? 'none' : 'transform 0.1s ease-out'
         }}
       >
         <span
@@ -359,10 +355,10 @@ const Hero = () => {
             <div 
               ref={statusChipRef}
               className="hidden lg:block mt-[96px] lg:mr-16 xl:mr-24"
-              style={{ opacity: prefersReduced ? 1 : 0 }}
+              style={{ opacity: PREFERS_REDUCED ? 1 : 0 }}
             >
               <div
-                className={`bg-[#DE9F2E] text-[#39471F] uppercase tracking-wider font-semibold rounded-sm ${prefersReduced ? 'rotate-[3deg]' : 'idle-drift'}`}
+                className={`bg-[#DE9F2E] text-[#39471F] uppercase tracking-wider font-semibold rounded-sm ${PREFERS_REDUCED ? 'rotate-[3deg]' : 'idle-drift'}`}
                 style={{
                   fontFamily: "'IBM Plex Mono', monospace",
                   fontSize: '12px',
@@ -384,7 +380,7 @@ const Hero = () => {
                 <div className="absolute top-0 w-[1.5px] h-full bg-[#39471F]/40 rounded-full" />
                 
                 {/* The traveling dot */}
-                {!prefersReduced ? (
+                {!PREFERS_REDUCED ? (
                   <div 
                     className="absolute top-0 w-[8px] h-[8px] bg-[#DE9F2E] rounded-full z-10"
                     style={{ animation: 'scrollDotDrop 2s ease-in-out infinite' }}
