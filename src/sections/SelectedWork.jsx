@@ -9,7 +9,7 @@ const PROJECTS = [
     id:   '01',
     name: 'Veyra',
     tags: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Cloudinary'],
-    link: 'https://verya-launch.netlify.app/',
+    link: 'https://veyra-launch.netlify.app/',
     hook: 'Built a bilingual e-commerce platform for a Kuwaiti brand, then hit the wall between local and production.',
     problem:
       "A food brand entering the Kuwaiti market needed to go from nothing to a working e-commerce presence, build brand awareness before launch, then be ready to actually sell product once it dropped. In that market, bilingual (English/Arabic) and mobile-first aren't optional.",

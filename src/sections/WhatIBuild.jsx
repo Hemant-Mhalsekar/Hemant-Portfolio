@@ -8,7 +8,7 @@ const PROJECTS = [
     oneLiner:
       'A full e-commerce platform for a Kuwait-based food brand — started as a bilingual pre-launch landing page, grew into the complete storefront.',
     tags: ['React', 'Node.js', 'MongoDB'],
-    link: 'https://verya-launch.netlify.app/',
+    link: 'https://veyra-launch.netlify.app/',
   },
   {
     name: 'Real-Time AI Surveillance System',
