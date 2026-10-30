@@ -19,18 +19,14 @@ const SEQUENCE = [
 
 // ── Terminal Widget ────────────────────────────────────────────────────────────
 const TerminalWidget = () => {
-  const [lines,       setLines]       = useState([]);  // completed lines
+  // Reduced motion: start with all lines shown, no animation
+  const [lines,       setLines]       = useState(() => (PREFERS_REDUCED ? SEQUENCE : []));  // completed lines
   const [typing,      setTyping]      = useState('');  // currently-typing text
   const [currentType, setCurrentType] = useState('cmd');
-  const [done,        setDone]        = useState(false);
+  const [done,        setDone]        = useState(PREFERS_REDUCED);
 
   useEffect(() => {
-    // Reduced motion: show all lines instantly, no animation
-    if (PREFERS_REDUCED) {
-      setLines(SEQUENCE);
-      setDone(true);
-      return;
-    }
+    if (PREFERS_REDUCED) return;
 
     let cancelled = false;
 
