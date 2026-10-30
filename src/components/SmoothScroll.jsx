@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import LenisContext from '../context/LenisContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const SmoothScroll = ({ children }) => {
-  const [lenisInstance, setLenisInstance] = useState(null);
-
   useEffect(() => {
     // Initialize Lenis
     const lenis = new Lenis({
@@ -36,9 +33,6 @@ const SmoothScroll = ({ children }) => {
     // Provide a way to scroll to top explicitly on mount or route changes if needed
     lenis.scrollTo(0, { immediate: true });
 
-    // Save instance to context
-    setLenisInstance(lenis);
-
     // Cleanup on unmount — remove the exact same function reference
     return () => {
       gsap.ticker.remove(onRaf);
@@ -47,9 +41,7 @@ const SmoothScroll = ({ children }) => {
   }, []);
 
   return (
-    <LenisContext.Provider value={lenisInstance}>
-      {children}
-    </LenisContext.Provider>
+    <>{children}</>
   );
 };
 
