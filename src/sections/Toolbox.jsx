@@ -3,18 +3,35 @@ import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 
 
 const ALL_TOOLS = [
-  'React', 'Node.js', 'Express', 'MongoDB', 'JavaScript', 'Java', 'Tailwind CSS',
-  'Git', 'Spring Boot', 'AWS', 'DSA', 'System Design', 'TypeScript', 'Next.js',
-  'Python', 'SQL', 'MySQL', 'JWT', 'Socket.io', 'REST APIs'
+  // Frontend
+  'React', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'Vite',
+  // Backend
+  'Node.js', 'Express', 'Java', 'Spring Boot', 'Spring Security', 'REST APIs', 'JWT', 'Socket.io',
+  // Data
+  'MongoDB', 'MySQL', 'PostgreSQL', 'SQL', 'Flyway',
+  // AI / ML
+  'Python', 'OpenCV', 'PyTorch',
+  // Testing and shipping
+  'JUnit', 'Testcontainers', 'Playwright', 'Docker', 'GitHub Actions', 'Git',
+  // Browser and edge
+  'Chrome Extensions', 'Cloudflare Workers',
+  // Fundamentals
+  'AWS', 'DSA', 'System Design',
 ];
 
 const COMFORTABLE = [
-  'React', 'Node.js', 'Express', 'MongoDB', 'JavaScript', 'Java', 'Tailwind CSS', 'Git'
+  'React', 'TypeScript', 'JavaScript', 'Node.js', 'Express', 'MongoDB',
+  'Java', 'Spring Boot', 'MySQL', 'Tailwind CSS', 'Git',
 ];
 
 const IMPROVING = [
-  'Spring Boot', 'AWS', 'DSA', 'System Design', 'TypeScript', 'Next.js'
+  'PostgreSQL', 'Docker', 'Automated testing', 'AWS', 'System Design', 'DSA', 'Next.js',
 ];
+
+// Tag cloud stagger: each tag starts TAG_STAGGER ms after the previous one,
+// and the two callout blocks fade in once the last tag has started.
+const TAG_STAGGER = 25;
+const CLOUD_END   = 150 + ALL_TOOLS.length * TAG_STAGGER;
 
 // Pseudo-random consistent rotation between -2 and 2 degrees
 const getRotation = (index) => {
@@ -65,7 +82,7 @@ const Toolbox = () => {
         <div className="flex flex-wrap gap-3 sm:gap-4 mb-16 sm:mb-20">
           {ALL_TOOLS.map((tool, i) => {
             const rot = getRotation(i);
-            const delay = 150 + i * 40; // Base delay + stagger
+            const delay = 150 + i * TAG_STAGGER; // Base delay + stagger
 
             return (
               <div
@@ -94,11 +111,11 @@ const Toolbox = () => {
         </div>
 
         {/* ── Callout Blocks ──────────────────────────────────────────────────────── */}
-        {/* They fade in after the tag cloud stagger finishes (~ 150 + 20*40 = 950ms) */}
+        {/* They fade in after the tag cloud stagger finishes (CLOUD_END) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-14">
           
           {/* Block 1: Most comfortable with */}
-          <div style={fadeUp(1000, 500, 16)}>
+          <div style={fadeUp(CLOUD_END + 50, 500, 16)}>
             <p
               className="text-[#DE9F2E] tracking-[0.18em] uppercase mb-5"
               style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
@@ -119,7 +136,7 @@ const Toolbox = () => {
           </div>
 
           {/* Block 2: Currently improving */}
-          <div style={fadeUp(1100, 500, 16)}>
+          <div style={fadeUp(CLOUD_END + 150, 500, 16)}>
             <p
               className="text-[#F1ECDD] tracking-[0.18em] uppercase mb-5"
               style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px' }}
