@@ -7,6 +7,45 @@ import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 const PROJECTS = [
   {
     id:   '01',
+    name: 'PeakTalent Auditor',
+    tags: ['JavaScript', 'Chrome Extension (MV3)', 'Cloudflare Workers', 'GitHub Actions', 'jsdom'],
+    link: 'https://github.com/Hemant-Mhalsekar/peaktalent-auditor-v10.5.5',
+    hook: 'Built a browser extension that reviews annotations alongside 80+ people, and learns from their corrections without ever seeing their documents.',
+    problem:
+      "At Scaler AI Labs, 80+ annotators and reviewers label personal and business data (names, companies, addresses, credentials, phone numbers) in documents on the PeakTalent dashboard. Every label is checked by hand against a long SOP, the documents range from resumes and bank statements to code and env files, and people read the rules differently. Missed labels and wrong labels slipped through, and reviewers spent their time on checks a machine could do.",
+    built:
+      "A browser extension (Chrome, Edge and Brave, plus a userscript and a Safari version) that compares the original and redacted documents side by side. It underlines text that should carry a label using the platform's own label colours, and outlines labels that break the SOP with a tag like \"Date -> Overscrubbed\" and the reason on hover. The engine runs fully offline: no document text ever leaves the browser, and a test checks that the engine contains no network calls. Long documents switch to a mode that only audits what's on screen. On top of that, a team sync: each reviewer's corrections are hashed in the browser and sent to a Cloudflare Worker, and a GitHub Action turns them into a shared rule bundle twice a day. A term is only learned once 3+ reviewers agree on 3+ files, and never if it breaks the rules. It also has an accuracy report per label and per reviewer, backed by 260+ rule checks and real-DOM tests.",
+    learned:
+      "Real documents are messier than any test set. Once the team used it on live work, the reports came in: a constant named API_KEY flagged as a credential, @echo off taken for a username, a link swallowing the lines below it. I made every report a failing test with synthetic data before touching the engine, so a fix could never quietly break an older one. Building the learning part taught me to decide whose word counts: the SOP rules beat the crowd, and the crowd beats any single person, because reviewers make mistakes too. And privacy had to be designed in from the start, not bolted on: only hashes and counts ever leave a reviewer's machine.",
+  },
+  {
+    id:   '02',
+    name: 'Fifty30',
+    tags: ['Java', 'Spring Boot', 'React', 'TypeScript', 'PostgreSQL', 'Playwright'],
+    link: 'https://fifty30-finance-tracker.vercel.app',
+    hook: 'A budget app that follows your pay day instead of the calendar, and never stores money as a float.',
+    problem:
+      "Most expense trackers work in calendar months and just log what you spent. But a salaried person gets paid on a fixed day, and the 50/30/20 rule only helps if every expense is measured against the plan while you're still spending. I wanted a tracker built around the pay cycle, for how people in India actually get paid.",
+    built:
+      "A Java 25 and Spring Boot 4 API with a React and TypeScript frontend that installs on a phone as an app, and PostgreSQL on Supabase. You enter your take-home salary and pay day, and each pay cycle is split into needs, wants and savings: 50/30/20 by default, or one of three presets (60/20/20 for high rent, 50/20/30 for saving, 40/30/30 for low costs). It handles bonuses, an opening balance, recurring expenses like rent and SIPs, weekly, monthly and yearly reports, and expenses added offline that sync later without ever being counted twice. Sign-in uses short-lived tokens with rotating refresh tokens, and the Swagger docs list the real error for every endpoint; a test fails if one is missing. 100+ backend tests against real PostgreSQL and 170+ frontend and browser tests run in CI.",
+    learned:
+      "The pay cycle had to be stored, not calculated. If a cycle is just a formula, changing your salary or pay day silently rewrites every past month. Storing each cycle with its own salary and split keeps history true. Free hosting shaped the design too: the server sleeps, so I couldn't rely on a nightly job to create new cycles. They're created on demand instead, under a database lock so two requests at once can't create overlapping cycles. And money is whole paise in integer columns end to end, because floating point and rupees don't mix.",
+  },
+  {
+    id:   '03',
+    name: 'ShelfSpace',
+    tags: ['Java', 'Spring Boot', 'MySQL', 'React', 'TypeScript', 'Docker'],
+    link: 'https://shelf-space-pi.vercel.app',
+    hook: 'Took my console library system and rebuilt it as the real thing: two roles, a waiting list, and no double booking.',
+    problem:
+      "My first library system ran in a console. It worked, but a real library has two kinds of users, books more than one person wants at the same time, and rules that change. I wanted to build the version that handles all of that, end to end.",
+    built:
+      "A Spring Boot REST API and a React and TypeScript web app. Members search the catalog, borrow, renew and reserve books, and get notifications and recommendations. Librarians approve loans, check books in, manage members and fines, and edit the borrowing rules from a dashboard with live numbers. A first-come waiting list holds freed copies for 48 hours, nightly jobs mark overdue loans and send reminders, and every librarian action lands in an audit log that can be filtered and exported. Sessions use rotating refresh tokens, and sign-in is rate limited. 150+ backend tests run against real MySQL, plus frontend component tests and a Playwright end-to-end test in CI. It's deployed on Vercel, Render and Aiven.",
+    learned:
+      "Concurrency is where a toy project and a real one split. Two members can try to borrow the last copy at the same moment, so each physical copy uses optimistic locking, and a test fires 10 simultaneous requests at it to prove exactly one wins. Putting the rules in the database instead of the code meant librarians can change loan limits or fines without a redeploy. Running it on free hosting taught me infrastructure limits are part of the design: two apps share one free hours budget on Render, so the keep-alive pings had to move to a daytime window or every service would get suspended.",
+  },
+  {
+    id:   '04',
     name: 'Veyra',
     tags: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Cloudinary'],
     link: 'https://veyra-launch.netlify.app/',
@@ -19,7 +58,7 @@ const PROJECTS = [
       "Real users don't behave like local testing. In production I hit 429 errors from rate limiting that never showed up locally, caused by express-rate-limit configuration that was fine in dev but too aggressive under real traffic. Fixing it meant actually understanding how React 18's Strict Mode double-invocation behaves differently in development versus production, instead of just patching around the symptom. That's the gap between a project that works on your machine and one that has to hold up for a real client.",
   },
   {
-    id:   '02',
+    id:   '05',
     name: 'Real-Time AI Surveillance System',
     tags: ['Python', 'YOLOv8', 'ByteTrack', 'OpenCV', 'PyTorch', 'Scikit-learn', 'Flask'],
     link: 'https://real-time-ai-surveillance-system.onrender.com/',
@@ -32,7 +71,7 @@ const PROJECTS = [
       "Starting rule-based first, then upgrading to a trained model, taught me when machine learning is actually worth the complexity. The rules got me a working system fast, but couldn't hold up to real variation in how people move. The classifier only made sense once I had real data to train it on; reaching for ML before you have that is usually premature. I also learned the practical side of running inference continuously: memory leaks are real in long-running video processing, which is why the system actively monitors and garbage-collects instead of just running until it falls over.",
   },
   {
-    id:   '03',
+    id:   '06',
     name: 'TaskPilot',
     tags: ['React', 'Node.js', 'Express', 'MongoDB', 'Socket.io', 'Groq'],
     link: 'https://taskpilot-task-manager.netlify.app/login',
@@ -45,7 +84,7 @@ const PROJECTS = [
       "Real-time sync doesn't survive every hosting environment. Locally, Socket.io keeps every open tab in sync instantly. On Vercel, it doesn't work the same way in production, because serverless functions don't hold a persistent connection the way WebSockets need. That's not a bug I fixed, it's a real constraint of serverless architecture, and it taught me to actually check what a hosting platform supports before assuming a feature will carry over from local to production.",
   },
   {
-    id:   '04',
+    id:   '07',
     name: 'CO-PO Mapper',
     tags: ['React', 'Zustand', 'SheetJS', 'react-to-print'],
     link: 'https://co-po-pos-mapping.netlify.app/',
@@ -58,7 +97,7 @@ const PROJECTS = [
       "Building something with zero backend forces different discipline than a normal web app. There's no server to fall back on if the client-side logic has a bug, so the calculation engine and the Excel parsing had to be right the first time. It also changed how I thought about state: everything lives in one global store instead of being scattered across components, which made the whole data pipeline easier to reason about, but meant getting the store structure right upfront actually mattered.",
   },
   {
-    id:   '05',
+    id:   '08',
     name: 'Shortify',
     tags: ['Java', 'Spring Boot', 'MySQL', 'Spring Security', 'JWT'],
     link: 'https://shortify-url-shortener-alpha.vercel.app/',
@@ -309,7 +348,7 @@ const SelectedWork = () => {
             ...fadeUp(110, 550, 20),
           }}
         >
-          Five projects, told properly
+          Eight projects, told properly
         </h2>
       </div>
 

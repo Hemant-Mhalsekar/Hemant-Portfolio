@@ -4,6 +4,27 @@ import { useScrollReveal, PREFERS_REDUCED } from '../hooks/useScrollReveal';
 // ── Data ───────────────────────────────────────────────────────────────────────
 const PROJECTS = [
   {
+    name: 'PeakTalent Auditor',
+    oneLiner:
+      'A browser extension that suggests labels and catches labeling mistakes for 80+ annotators at Scaler AI Labs — fully offline, and it learns from the team without seeing their documents.',
+    tags: ['JavaScript', 'Chrome Extension', 'Cloudflare Workers'],
+    link: 'https://github.com/Hemant-Mhalsekar/peaktalent-auditor-v10.5.5',
+  },
+  {
+    name: 'Fifty30',
+    oneLiner:
+      'An expense tracker built on the 50/30/20 rule — every pay cycle splits into needs, wants and savings, with three other splits to choose from.',
+    tags: ['Spring Boot', 'React', 'PostgreSQL'],
+    link: 'https://fifty30-finance-tracker.vercel.app',
+  },
+  {
+    name: 'ShelfSpace',
+    oneLiner:
+      'A full-stack library system — members borrow, renew and reserve books, librarians run loans, fines and borrowing rules from a dashboard.',
+    tags: ['Spring Boot', 'React', 'MySQL'],
+    link: 'https://shelf-space-pi.vercel.app',
+  },
+  {
     name: 'Veyra',
     oneLiner:
       'A full e-commerce platform for a Kuwait-based food brand — started as a bilingual pre-launch landing page, grew into the complete storefront.',
@@ -134,10 +155,14 @@ const ChevronDown = () => (
   </svg>
 );
 
+// Cards after the first three stay hidden until "See more projects"
+const INITIAL_COUNT = 3;
+const EXTRA_INDICES = PROJECTS.map((_, i) => i).filter((i) => i >= INITIAL_COUNT);
+
 const WhatIBuild = () => {
   const { sectionRef, fadeUp } = useScrollReveal(0.08);
 
-  // Extra card reveal: tracks which of indices 3-5 are faded in
+  // Extra card reveal: tracks which cards after the first three are faded in
   const [showAll,       setShowAll]       = useState(false);
   const [revealedExtras, setRevealedExtras] = useState(new Set());
 
@@ -146,13 +171,13 @@ const WhatIBuild = () => {
     setShowAll(true); // renders extra cards at opacity 0 in first commit
 
     if (PREFERS_REDUCED) {
-      setRevealedExtras(new Set([3, 4, 5]));
+      setRevealedExtras(new Set(EXTRA_INDICES));
       return;
     }
 
     // Stagger: extra cards fade in at 0ms, 100ms, 200ms after render
     const timeouts = [];
-    [3, 4, 5].forEach((idx, order) => {
+    EXTRA_INDICES.forEach((idx, order) => {
       const t = setTimeout(() => {
         setRevealedExtras((prev) => new Set([...prev, idx]));
       }, order * 100);
@@ -207,7 +232,7 @@ const WhatIBuild = () => {
             via staggered timeouts after the "see more" click. */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {PROJECTS.map((project, i) => {
-            const isExtra = i >= 3;
+            const isExtra = i >= INITIAL_COUNT;
             if (isExtra && !showAll) return null; // not yet in DOM
 
             const isRevealed = !isExtra || revealedExtras.has(i);

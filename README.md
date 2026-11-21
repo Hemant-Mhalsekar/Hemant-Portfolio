@@ -75,6 +75,9 @@ src/
 
 ## Featured Projects
 
+- **PeakTalent Auditor**: A browser extension used by 80+ annotators at Scaler AI Labs that suggests labels and flags labeling mistakes, fully offline, with a privacy-preserving team sync.
+- **Fifty30**: An expense tracker built on the 50/30/20 rule, with pay cycles, three other split presets and offline expense entry (Spring Boot, React, PostgreSQL).
+- **ShelfSpace**: A full-stack library management system with member and librarian roles, a fair waiting list and no double booking (Spring Boot, React, MySQL).
 - **Veyra**: A full e-commerce platform for a Kuwait-based food brand, starting as a landing page and growing into a complete storefront.
 - **Real-Time AI Surveillance System**: Flags loitering, running, and intrusion in live video using YOLOv8, motion tracking, and a trained classifier.
 - **TaskPilot**: A Kanban board that ranks tasks by urgency and breaks them into subtasks using an LLM.
