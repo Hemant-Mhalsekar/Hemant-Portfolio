@@ -70,45 +70,6 @@ const PROJECTS = [
     learned:
       "Starting rule-based first, then upgrading to a trained model, taught me when machine learning is actually worth the complexity. The rules got me a working system fast, but couldn't hold up to real variation in how people move. The classifier only made sense once I had real data to train it on; reaching for ML before you have that is usually premature. I also learned the practical side of running inference continuously: memory leaks are real in long-running video processing, which is why the system actively monitors and garbage-collects instead of just running until it falls over.",
   },
-  {
-    id:   '06',
-    name: 'TaskPilot',
-    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'Socket.io', 'Groq'],
-    link: 'https://taskpilot-task-manager.netlify.app/login',
-    hook: 'Built a Kanban board that thinks about priority for you, then ran into a hard limit of serverless hosting.',
-    problem:
-      "Kanban boards are everywhere, but most of them just move cards around. They don't help you figure out what actually matters right now. I wanted to see what a task manager looks like if an LLM does some of that thinking instead of leaving it all on the user.",
-    built:
-      "A full MERN Kanban board with drag-and-drop across To Do, In Progress, and Done, and real-time sync across open tabs via Socket.io. On top of that, three AI workflows running on Groq's Llama 3.3: one ranks incomplete tasks by actual urgency instead of just due date, one takes a task title and breaks it into five concrete subtasks, and a focus mode picks the top three tasks for the day and runs a countdown session. Auth is JWT-based, and the token lives in memory instead of localStorage specifically to reduce XSS exposure.",
-    learned:
-      "Real-time sync doesn't survive every hosting environment. Locally, Socket.io keeps every open tab in sync instantly. On Vercel, it doesn't work the same way in production, because serverless functions don't hold a persistent connection the way WebSockets need. That's not a bug I fixed, it's a real constraint of serverless architecture, and it taught me to actually check what a hosting platform supports before assuming a feature will carry over from local to production.",
-  },
-  {
-    id:   '07',
-    name: 'CO-PO Mapper',
-    tags: ['React', 'Zustand', 'SheetJS', 'react-to-print'],
-    link: 'https://co-po-pos-mapping.netlify.app/',
-    hook: 'Built a tool with no backend on purpose, because for this one, the constraint was the whole point.',
-    problem:
-      "Engineering colleges have to report Course Outcome and Program Outcome attainment for NBA accreditation, and most departments were doing it by hand in Excel: one spreadsheet per course, formulas prone to breaking, no consistent format, and a lot of faculty time lost every semester.",
-    built:
-      "A guided, step-by-step tool that walks a faculty member through the whole process: define course details and outcomes, import the student roster straight from an Excel file, enter CIE and SEE marks, and the attainment engine calculates direct and indirect attainment levels and CO-PO correlation matrices automatically, then exports a formatted PDF report. The deliberate decision was zero backend. No server, no database, everything runs in the browser and lives in memory for that session. For a tool handling student grading data, that's not a limitation, it's the point: no server means no infrastructure cost, no data leaving the user's machine, and it can be used offline or on a restricted network without setup.",
-    learned:
-      "Building something with zero backend forces different discipline than a normal web app. There's no server to fall back on if the client-side logic has a bug, so the calculation engine and the Excel parsing had to be right the first time. It also changed how I thought about state: everything lives in one global store instead of being scattered across components, which made the whole data pipeline easier to reason about, but meant getting the store structure right upfront actually mattered.",
-  },
-  {
-    id:   '08',
-    name: 'Shortify',
-    tags: ['Java', 'Spring Boot', 'MySQL', 'Spring Security', 'JWT'],
-    link: 'https://shortify-url-shortener-alpha.vercel.app/',
-    hook: 'Wanted to actually learn Spring Boot, not just use it for DSA. This is what came out of it.',
-    problem:
-      "I wanted a project that actually forced me to work in Java and Spring Boot properly, not just as a side language for DSA. A URL shortener is a small enough scope to build fully, but has enough real pieces, auth, rate limiting, redirects at scale, to actually learn from instead of just checking a box.",
-    built:
-      "A full-stack shortener with Google OAuth sign-in, custom short codes or aliases, optional link expiration, and a dashboard showing click counts per link. The backend runs on Spring Boot with stateless JWT authentication, and every request is rate-limited with Bucket4j so the API can't get hammered. Deployed as a containerized Spring Boot backend on Render, MySQL on Clever Cloud, React frontend on Vercel.",
-    learned:
-      "Rate limiting sounds simple until you actually implement it. I used an in-memory token bucket instead of reaching for Redis, since a single-instance app doesn't need a distributed store, and adding one would've been complexity for its own sake. That was a real lesson in matching the tool to the actual scale of the problem, not the scale you imagine you'll eventually have. Getting OAuth working end to end, from Google's redirect back to a signed JWT the frontend can actually use, also taught me more about how authentication flows really work than any tutorial did.",
-  },
 ];
 
 const STORY = [
@@ -348,7 +309,7 @@ const SelectedWork = () => {
             ...fadeUp(110, 550, 20),
           }}
         >
-          Eight projects, told properly
+          Five projects, told properly
         </h2>
       </div>
 
