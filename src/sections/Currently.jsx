@@ -7,9 +7,10 @@ const ITEMS = [
   { text: 'AWS / S3',    status: 'done'        },
   { text: 'React',       status: 'done'        },
   { text: 'Node.js',     status: 'done'        },
+  { text: 'Spring Boot', status: 'done'        },
+  { text: 'TypeScript',  status: 'done'        },
   { text: 'DSA (Java)',  status: 'in-progress' },
-  { text: 'Spring Boot', status: 'in-progress' },
-  { text: 'TypeScript',  status: 'queued'      },
+  { text: 'Docker',      status: 'in-progress' },
   { text: 'Next.js',     status: 'queued'      },
 ];
 
@@ -213,9 +214,10 @@ const Currently = () => {
                 the buzzwords. Alongside that I'm going deeper into React, Node and
                 JavaScript, less "make it work," more "understand why it works." I've
                 also been grinding DSA in Java, and somewhere in there I ended up liking
-                Java more than I expected to, enough that I've got a few Spring Boot
-                project ideas I want to build. Next up is TypeScript and Next.js. The
-                list never really ends, and I've made peace with that.
+                Java more than I expected to, enough that Fifty30 and ShelfSpace both
+                run on Spring Boot, with TypeScript on the frontend. Now I'm getting
+                properly comfortable with Docker, and Next.js is next. The list never
+                really ends, and I've made peace with that.
               </p>
 
               {/* 4 ▸ Quote block — fade in at 340ms; border grows at 440ms
